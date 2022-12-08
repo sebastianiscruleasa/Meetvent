@@ -1,13 +1,18 @@
-import {StyleSheet, Text} from "react-native";
+import {StyleSheet, View} from "react-native";
+import Interests from "../components/ProfileScreen/Interests";
 
 function ProfileScreen() {
     return (
-        <Text>ProfileScreen</Text>
+        <View>
+            <Interests/>
+        </View>
     )
 }
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-
+    container: {
+        flexDirection: "row",
+    }
 })
