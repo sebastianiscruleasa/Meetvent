@@ -25,7 +25,7 @@ export default ButtonContained;
 const styles = StyleSheet.create({
     buttonOuterContainer: {
         borderRadius: 16,
-        margin: 5,
+        margin: 4,
         overflow: 'hidden',
     },
     buttonInnerContainer: {
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary500,
         paddingVertical: 8,
         paddingHorizontal: 16,
-        elevation: 2,
     },
     buttonText: {
         color: 'white',

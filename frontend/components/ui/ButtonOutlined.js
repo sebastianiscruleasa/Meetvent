@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingVertical: 8,
-        paddingHorizontal: 16,
-        elevation: 2
+        paddingHorizontal: 16
     },
     buttonText: {
         color: colors.primary500,
