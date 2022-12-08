@@ -4,9 +4,7 @@ import ButtonContained from "../ui/ButtonContained";
 
 import interests from "../../constants/interests";
 
-const DUMMY_INTERESTS = ["Movies", "Football", "Art", "Concert", "Music", "Online Games"];
-
-function Interests() {
+function Interests({list}) {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -15,7 +13,7 @@ function Interests() {
             </View>
             <View style={styles.interestsContainer}>
                 {interests
-                    .filter((interest) => DUMMY_INTERESTS.includes(interest.name))
+                    .filter((interest) => list.includes(interest.name))
                     .map((interest) => <ButtonContained key={interest.key}
                                                         color={interest.color}>{interest.name}</ButtonContained>)}
             </View>
