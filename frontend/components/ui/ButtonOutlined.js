@@ -4,18 +4,18 @@ import colors from "../../constants/colors";
 
 function ButtonOutlined({iconSize, icon, children, onPress}) {
     return (
-        <View style={styles.buttonOuterContainer}>
-            <Pressable
-                style={({ pressed }) =>
-                    pressed && styles.pressed
-                }
-                onPress={onPress} >
-                <View style={styles.buttonInnerContainer}>
-                    <Ionicons name={icon} size={iconSize ? iconSize : 18} color="#8C3EF1"/>
-                    <Text style={[styles.buttonText, {marginLeft: icon ? 4 : 0}]}>{children}</Text>
-                </View>
-            </Pressable>
-        </View>
+        <Pressable
+            style={({pressed}) =>
+                pressed
+                    ? [styles.buttonOuterContainer, styles.pressed]
+                    : [styles.buttonOuterContainer]
+            }
+            onPress={onPress}>
+            <View style={styles.buttonInnerContainer}>
+                <Ionicons name={icon} size={iconSize ? iconSize : 18} color="#8C3EF1"/>
+                <Text style={[styles.buttonText, {marginLeft: icon ? 4 : 0}]}>{children}</Text>
+            </View>
+        </Pressable>
     )
 }
 

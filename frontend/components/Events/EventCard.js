@@ -3,12 +3,16 @@ import colors from "../../constants/colors";
 import {Ionicons} from "@expo/vector-icons";
 
 function EventCard({id, image, date, title, location}) {
-    function pressHandler(){
+    function pressHandler() {
         console.log(`navigate to ${id}`);
     }
 
     return (
-        <Pressable style={styles.container} onPress={pressHandler}>
+        <Pressable onPress={pressHandler} style={({pressed}) =>
+            pressed
+                ? [styles.container, styles.pressed]
+                : [styles.container]
+        }>
             <View style={styles.imageContainer}>
                 <Image style={styles.image} source={{uri: image}}/>
             </View>
@@ -65,5 +69,8 @@ const styles = StyleSheet.create({
     locationText: {
         color: colors.grey800,
         marginLeft: 4
+    },
+    pressed: {
+        opacity: 0.5
     }
 })
