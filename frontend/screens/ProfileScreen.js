@@ -1,5 +1,5 @@
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
-import Interests from "../components/ProfileScreen/Interests";
+import Interests from "../components/Profile/Interests";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
 
