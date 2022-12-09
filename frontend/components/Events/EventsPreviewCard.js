@@ -20,7 +20,7 @@ function EventsPreviewCard({id, image, date, title, location}) {
                         <Text style={styles.dateText}>JUNE</Text>
                     </View>
                     <Pressable style={styles.favoriteContainer}>
-                        <Ionicons name="bookmark" color="red" style={styles.favorite}/>
+                        <Ionicons name="bookmark" color="red" size={16} style={styles.favorite}/>
                     </Pressable>
                 </View>
                 <Image style={styles.image} source={{uri: image}}/>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         width:220,
         height:180,
         backgroundColor: "white",
-        marginVertical: 8,
+        marginVertical: 12,
         marginHorizontal: 8,
         borderRadius: 8,
         alignItems: "center"
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     date:{
         backgroundColor: 'rgba(256, 256, 256, 0.7)',
-        borderRadius: 4,
+        borderRadius: 8,
         alignItems: "center",
         padding:2,
         top: 8,
@@ -81,11 +81,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         top: 8,
-        left: 136,
+        left: 132,
     },
     favorite:{
         backgroundColor: 'rgba(256, 256, 256, 0.7)',
-        borderRadius: 4,
+        borderRadius: 8,
         overflow:'hidden',
         padding:4
     },

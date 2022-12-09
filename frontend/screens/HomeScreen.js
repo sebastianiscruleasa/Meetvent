@@ -1,5 +1,5 @@
-import {FlatList, StyleSheet} from "react-native";
-import EventsPreviewCard from "../components/Events/EventsPreviewCard";
+import {StyleSheet, View} from "react-native";
+import EventPreviewList from "../components/Events/EventPreviewList";
 
 const DUMMY_EVENTS = [
     {
@@ -62,11 +62,10 @@ const DUMMY_EVENTS = [
 
 function HomeScreen() {
     return (
-        <FlatList horizontal={true} data={DUMMY_EVENTS} keyExtractor={(event) => event.id} renderItem={(itemData) =>
-            <EventsPreviewCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
-                               date={itemData.item.date.day}
-                               location={itemData.item.location}/>
-        }/>
+        <View>
+            <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>
+            <EventPreviewList title="Your Upcoming Events" list={DUMMY_EVENTS}/>
+        </View>
     )
 }
 
