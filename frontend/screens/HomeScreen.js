@@ -1,5 +1,6 @@
 import {StyleSheet, View} from "react-native";
 import EventPreviewList from "../components/Events/EventPreviewList";
+import SearchHome from "../components/Search/SearchHome";
 
 const DUMMY_EVENTS = [
     {
@@ -61,8 +62,10 @@ const DUMMY_EVENTS = [
 ]
 
 function HomeScreen() {
+
     return (
         <View>
+            <SearchHome/>
             <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>
             <EventPreviewList title="Your Upcoming Events" list={DUMMY_EVENTS}/>
         </View>
