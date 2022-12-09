@@ -4,19 +4,19 @@ import {Ionicons} from "@expo/vector-icons";
 
 function ButtonContained({icon, iconSize, color, children, onPress}) {
     return (
-        <View style={styles.buttonOuterContainer}>
-            <Pressable
-                style={({pressed}) =>
-                    pressed && styles.pressed
-                }
-                onPress={onPress}
-            >
-                <View style={[styles.buttonInnerContainer, {backgroundColor: color ? color : colors.primary500}]}>
-                    <Ionicons name={icon} size={iconSize ? iconSize : 18} color="white"/>
-                    <Text style={[styles.buttonText, {marginLeft: icon ? 4 : 0}]}>{children}</Text>
-                </View>
-            </Pressable>
-        </View>
+        <Pressable
+            style={({pressed}) =>
+                pressed
+                    ? [styles.buttonOuterContainer, styles.pressed]
+                    : [styles.buttonOuterContainer]
+            }
+            onPress={onPress}
+        >
+            <View style={[styles.buttonInnerContainer, {backgroundColor: color ? color : colors.primary500}]}>
+                <Ionicons name={icon} size={iconSize ? iconSize : 18} color="white"/>
+                <Text style={[styles.buttonText, {marginLeft: icon ? 4 : 0}]}>{children}</Text>
+            </View>
+        </Pressable>
     );
 }
 
