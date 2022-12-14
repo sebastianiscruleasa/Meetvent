@@ -1,10 +1,16 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
-import colors from "../../constants/colors";
+import { useNavigation } from '@react-navigation/native';
+
 import {Ionicons} from "@expo/vector-icons";
+import colors from "../../constants/colors";
 
 function EventCard({id, image, date, title, location}) {
+    const navigation = useNavigation();
+
     function pressHandler() {
-        console.log(`navigate to ${id}`);
+        navigation.navigate("EventDetailScreen", {
+            eventId: id
+        })
     }
 
     return (

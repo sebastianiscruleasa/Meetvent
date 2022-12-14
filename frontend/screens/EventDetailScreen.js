@@ -1,8 +1,10 @@
 import {StyleSheet, Text} from "react-native";
 
-function EventDetailScreen() {
+function EventDetailScreen({route}) {
+    const eventId = route.params.eventId;
+
     return (
-        <Text>EventDetailScreen</Text>
+        <Text>{eventId}</Text>
     )
 }
 
