@@ -14,10 +14,18 @@ import EventDetailScreen from "./screens/EventDetailScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+import colors from "./constants/colors";
+
 function StackNavigator() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} options={{
+                headerStyle: {
+                    backgroundColor: colors.primary500,
+            },
+                headerTintColor: "white",
+                headerShadowVisible: false
+            }}/>
             <Stack.Screen name="EventDetailScreen" component={EventDetailScreen} />
         </Stack.Navigator>
     )
