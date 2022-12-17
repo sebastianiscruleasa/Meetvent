@@ -2,7 +2,6 @@ import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import Interests from "../components/Profile/Interests";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
-import ButtonContainedLarge from "../components/ui/ButtonContainedLarge";
 import {useContext} from "react";
 import {AuthContext} from "../store/auth-context";
 
@@ -36,8 +35,8 @@ function ProfileScreen() {
             </View>
             <Interests list={interests}/>
             <View style={styles.buttons}>
-                <ButtonContainedLarge color={colors.error500} icon="exit" iconSize={28}
-                                      iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonContainedLarge>
+                <ButtonOutlined color={colors.error500} icon="log-out-outline" iconSize={22}
+                                      iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonOutlined>
             </View>
         </ScrollView>
     )
