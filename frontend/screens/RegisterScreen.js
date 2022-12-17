@@ -3,13 +3,17 @@ import RegisterForm from "../components/Auth/RegisterForm";
 import colors from "../constants/colors";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 
-function RegisterScreen() {
+function RegisterScreen({navigation}) {
+    function switchToLoginHandler(){
+        navigation.replace('Login')
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} source={require('./../assets/logo.png')}/>
             </View>
-            <View style={styles.form}>
+            <View>
                 <RegisterForm/>
             </View>
             <View style={styles.bottomContainer}>
@@ -21,7 +25,7 @@ function RegisterScreen() {
                     <View style={styles.line}/>
                 </View>
                 <View style={styles.loginButtonContainer}>
-                    <ButtonOutlined>LOGIN</ButtonOutlined>
+                    <ButtonOutlined onPress={switchToLoginHandler}>LOGIN</ButtonOutlined>
                 </View>
             </View>
         </View>
@@ -39,17 +43,12 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         marginTop: 36,
-        // height: "20%",
         justifyContent: "center"
     },
     logo: {
         alignSelf: "center",
         width: 200,
         height: 80
-    },
-    form: {
-        // height: "50%",
-        // paddingHorizontal: 24,
     },
     bottomContainer:{
         marginBottom:36
