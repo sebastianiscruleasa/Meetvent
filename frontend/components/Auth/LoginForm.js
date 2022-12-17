@@ -4,7 +4,7 @@ import ButtonContainedLarge from "../ui/ButtonContainedLarge";
 import colors from "../../constants/colors";
 import {useState} from "react";
 
-function LoginForm() {
+function LoginForm({onAuthenticate}) {
     const [credentials, setCredentials] = useState({
         email: {
             value: '',
@@ -45,8 +45,7 @@ function LoginForm() {
             });
             return;
         }
-        console.log("logged in");
-        // onAuthenticate({ email, password });
+        onAuthenticate({ email, password });
     }
 
     return (

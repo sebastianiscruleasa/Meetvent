@@ -4,7 +4,7 @@ import {useState} from "react";
 import colors from "../../constants/colors";
 import ButtonContainedLarge from "../ui/ButtonContainedLarge";
 
-function RegisterForm() {
+function RegisterForm({onAuthenticate}) {
     const [credentials, setCredentials] = useState({
         username: {
             value: '',
@@ -57,8 +57,7 @@ function RegisterForm() {
             });
             return;
         }
-        console.log("registrat");
-        // onAuthenticate({ email, password });
+        onAuthenticate({ email, password });
     }
 
     return (

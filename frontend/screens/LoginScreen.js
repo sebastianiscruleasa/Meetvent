@@ -1,11 +1,38 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, StyleSheet, Text, View} from "react-native";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
 import LoginForm from "../components/Auth/LoginForm";
+import {useContext, useState} from "react";
+import {AuthContext} from "../store/auth-context";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function LoginScreen({navigation}) {
     function switchToRegisterHandler(){
         navigation.replace('Register')
+    }
+
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+    const authCtx = useContext(AuthContext);
+
+    async function loginHandler({ email, password }) {
+        setIsAuthenticating(true);
+        try {
+            //const token = await loginRequest(email, password);
+            // authCtx.authenticate(token);
+            console.log(`${email}+${password}`);
+            authCtx.authenticate(`${email}+${password}`);
+        } catch (error) {
+            Alert.alert(
+                'Authentication failed!',
+                'Could not log you in. Please check your credentials or try again later!'
+            );
+            setIsAuthenticating(false);
+        }
+    }
+
+    if (isAuthenticating) {
+        return <LoadingOverlay message="Logging you in..." />;
     }
 
     return (
@@ -14,7 +41,7 @@ function LoginScreen({navigation}) {
                 <Image style={styles.logo} source={require('./../assets/logo.png')}/>
             </View>
             <View>
-                <LoginForm/>
+                <LoginForm onAuthenticate={loginHandler}/>
             </View>
             <View style={styles.bottomContainer}>
                 <View style={styles.bottomTextContainer}>
