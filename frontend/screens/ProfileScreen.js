@@ -2,6 +2,9 @@ import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import Interests from "../components/Profile/Interests";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
+import ButtonContainedLarge from "../components/ui/ButtonContainedLarge";
+import {useContext} from "react";
+import {AuthContext} from "../store/auth-context";
 
 const DUMMY_PROFILE = {
     image: "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px",
@@ -11,8 +14,9 @@ const DUMMY_PROFILE = {
 }
 
 function ProfileScreen() {
-
     const {image, name, about, interests} = DUMMY_PROFILE;
+
+    const authCtx = useContext(AuthContext);
 
     return (
         <ScrollView>
@@ -31,6 +35,10 @@ function ProfileScreen() {
                 <Text>{about}</Text>
             </View>
             <Interests list={interests}/>
+            <View style={styles.buttons}>
+                <ButtonContainedLarge color={colors.error500} icon="exit" iconSize={28}
+                                      iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonContainedLarge>
+            </View>
         </ScrollView>
     )
 }
@@ -65,7 +73,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderBottomWidth: 2,
         borderColor: colors.primary600,
-        marginBottom:16
+        marginBottom: 16
     },
     aboutHeaderText: {
         textAlign: "center",
@@ -73,5 +81,9 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 14,
         paddingBottom: 2
-    }
+    },
+    buttons: {
+        justifyContent: "center",
+        alignSelf: "center",
+    },
 })

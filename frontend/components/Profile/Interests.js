@@ -25,7 +25,8 @@ export default Interests;
 
 const styles = StyleSheet.create({
     container: {
-        margin: 24,
+        marginVertical: 16,
+        marginHorizontal: 24,
     },
     headerContainer: {
         marginBottom: 12,
