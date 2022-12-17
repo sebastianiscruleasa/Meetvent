@@ -2,18 +2,19 @@ import {Pressable, StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import colors from "../../constants/colors";
 
-function ButtonOutlined({iconSize, icon, children, onPress}) {
+function ButtonOutlined({iconSize, iconOnTheRight, color, icon, children, onPress}) {
     return (
         <Pressable
             style={({pressed}) =>
                 pressed
-                    ? [styles.buttonOuterContainer, styles.pressed]
-                    : [styles.buttonOuterContainer]
+                    ? [styles.buttonOuterContainer, {borderColor: color ? color : colors.primary600}, styles.pressed]
+                    : [styles.buttonOuterContainer, {borderColor: color ? color : colors.primary600}]
             }
             onPress={onPress}>
             <View style={styles.buttonInnerContainer}>
-                <Ionicons name={icon} size={iconSize ? iconSize : 18} color="#8C3EF1"/>
-                <Text style={[styles.buttonText, {marginLeft: icon ? 4 : 0}]}>{children}</Text>
+                { !iconOnTheRight && <Ionicons name={icon} size={iconSize ? iconSize : 18} color={color ? color : colors.primary500}/>}
+                <Text style={[styles.buttonText, {marginHorizontal: icon ? 8 : 0, color:color ? color : colors.primary500}]}>{children}</Text>
+                { iconOnTheRight && <Ionicons name={icon} size={iconSize ? iconSize : 18} color={color ? color : colors.primary500}/>}
             </View>
         </Pressable>
     )
@@ -25,7 +26,6 @@ const styles = StyleSheet.create({
     buttonOuterContainer: {
         borderRadius: 16,
         margin: 4,
-        borderColor: colors.primary600,
         borderWidth: 1
     },
     buttonInnerContainer: {
