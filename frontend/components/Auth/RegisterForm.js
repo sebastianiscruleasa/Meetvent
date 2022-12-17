@@ -109,7 +109,7 @@ export default RegisterForm;
 
 const styles = StyleSheet.create({
     buttons: {
-        marginTop: 12,
+        marginTop: 24,
         justifyContent: "center",
         alignSelf: "center",
     },
