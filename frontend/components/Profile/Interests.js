@@ -25,9 +25,10 @@ export default Interests;
 
 const styles = StyleSheet.create({
     container: {
-        margin: 16,
+        margin: 24,
     },
     headerContainer: {
+        marginBottom: 12,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"

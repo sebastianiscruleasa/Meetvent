@@ -78,8 +78,12 @@ function AuthenticatedNavigator() {
 function AuthNavigator() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen}/>
-            <Stack.Screen name="Signup" component={RegisterScreen}/>
+            <Stack.Screen name="Register" component={RegisterScreen} options={{
+                headerShown: false,
+            }}/>
+            <Stack.Screen name="Login" component={LoginScreen} options={{
+                headerShown: false,
+            }}/>
         </Stack.Navigator>
     )
 }
@@ -87,8 +91,8 @@ function AuthNavigator() {
 export default function App() {
     return (
         <NavigationContainer>
-            {/*<AuthNavigator/>*/}
-            <AuthenticatedNavigator/>
+            <AuthNavigator/>
+            {/*<AuthenticatedNavigator/>*/}
         </NavigationContainer>
     );
 }

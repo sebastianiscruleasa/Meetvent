@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     date:{
-        backgroundColor: 'rgba(256, 256, 256, 0.7)',
+        backgroundColor: 'rgba(256, 256, 256, 0.85)',
         borderRadius: 8,
         alignItems: "center",
         padding:2,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         left: 132,
     },
     favorite:{
-        backgroundColor: 'rgba(256, 256, 256, 0.7)',
+        backgroundColor: 'rgba(256, 256, 256, 0.85)',
         borderRadius: 8,
         overflow:'hidden',
         padding:4

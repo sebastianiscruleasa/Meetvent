@@ -1,7 +1,7 @@
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import EventDetailRow from "../components/Events/EventDetailRow";
-import ButtonContained from "../components/ui/ButtonContained";
 import colors from "../constants/colors";
+import ButtonContainedLarge from "../components/ui/ButtonContainedLarge";
 
 const DUMMY_EVENTS = [
     {
@@ -137,8 +137,8 @@ function EventDetailScreen({route}) {
                 <Text style={styles.description}>{description}</Text>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <ButtonContained color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={24}
-                                 iconOnTheRight={true}>GOING</ButtonContained>
+                <ButtonContainedLarge color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={24}
+                                 iconOnTheRight={true}>GOING</ButtonContainedLarge>
             </View>
         </View>
     )
@@ -172,9 +172,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
     },
     buttonContainer: {
-        height: "10%",
         justifyContent: "center",
-        alignSelf: "center",
-        width: 120
+        alignItems: "center",
     }
 })

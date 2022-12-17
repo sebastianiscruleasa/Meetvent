@@ -59,13 +59,12 @@ const styles = StyleSheet.create({
     },
     aboutContainer: {
         marginBottom: 16,
-        marginHorizontal: 16,
-        alignItems: "center"
+        marginHorizontal: 24,
     },
     aboutHeaderContainer: {
+        alignSelf: "center",
         borderBottomWidth: 2,
         borderColor: colors.primary600,
-        width: 55,
         marginBottom:16
     },
     aboutHeaderText: {
