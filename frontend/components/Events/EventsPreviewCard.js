@@ -8,7 +8,7 @@ function EventsPreviewCard({id, image, date, title, location}) {
     const navigation = useNavigation();
 
     function pressHandler() {
-        navigation.navigate("EventDetailScreen", {
+        navigation.navigate("EventDetailScreenHome", {
             eventId: id
         })
     }

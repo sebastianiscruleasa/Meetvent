@@ -1,5 +1,3 @@
-import {StyleSheet} from 'react-native';
-
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
@@ -16,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 import colors from "./constants/colors";
 
-function StackNavigator() {
+function HomeStackNavigator() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} options={{
@@ -26,7 +24,16 @@ function StackNavigator() {
                 headerTintColor: "white",
                 headerShadowVisible: false
             }}/>
-            <Stack.Screen name="EventDetailScreen" component={EventDetailScreen} />
+            <Stack.Screen name="EventDetailScreenHome" component={EventDetailScreen} />
+        </Stack.Navigator>
+    )
+}
+
+function EventsStackNavigator() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Events" component={EventsScreen}/>
+            <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen} />
         </Stack.Navigator>
     )
 }
@@ -36,17 +43,19 @@ export default function App() {
         <NavigationContainer>
             <Tab.Navigator
                 screenOptions={{
-                    tabBarActiveTintColor: '#8C3EF1'
+                    tabBarActiveTintColor: colors.primary500
                 }}
             >
-                <Tab.Screen name="Stack" component={StackNavigator} options={{
+                <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{
                     title: "Home",
                     headerShown: false,
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="home" color={color} size={size}/>
                     ),
                 }}/>
-                <Tab.Screen name="Events" component={EventsScreen} options={{
+                <Tab.Screen name="EventsStack" component={EventsStackNavigator} options={{
+                    title: "Events",
+                    headerShown: false,
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="calendar" color={color} size={size}/>
                     ),
@@ -65,12 +74,3 @@ export default function App() {
         </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
