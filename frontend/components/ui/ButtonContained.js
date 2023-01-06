@@ -2,7 +2,7 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 import colors from "../../constants/colors";
 import {Ionicons} from "@expo/vector-icons";
 
-function ButtonContained({icon, iconSize, iconOnTheRight, color, children, onPress}) {
+function ButtonContained({icon, iconSize, iconOnTheRight, justIcon, color, children, onPress}) {
     return (
         <Pressable
             style={({pressed}) =>
@@ -14,7 +14,7 @@ function ButtonContained({icon, iconSize, iconOnTheRight, color, children, onPre
         >
             <View style={[styles.buttonInnerContainer, {backgroundColor: color ? color : colors.primary500}]}>
                 {!iconOnTheRight && <Ionicons name={icon} size={iconSize ? iconSize : 18} color="white"/>}
-                <Text style={[styles.buttonText, {marginHorizontal: icon ? 4 : 0}]}>{children}</Text>
+                <Text style={[styles.buttonText, {marginHorizontal: icon && !justIcon ? 4 : 0}]}>{children}</Text>
                 {iconOnTheRight && <Ionicons name={icon} size={iconSize ? iconSize : 18} color="white"/>}
             </View>
         </Pressable>
