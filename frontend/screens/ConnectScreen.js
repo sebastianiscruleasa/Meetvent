@@ -2,6 +2,7 @@ import React, {useState, useMemo} from 'react'
 import {ImageBackground, Text, View} from 'react-native'
 import TinderCard from 'react-tinder-card'
 import ButtonContained from "../components/ui/ButtonContained";
+import {LinearGradient} from 'expo-linear-gradient';
 
 const db = [
     {
@@ -47,7 +48,7 @@ function ConnectScreen() {
         setCharacters(charactersState)
     }
 
-    const swipe = (dir) => {
+    const swipeButtonHandler = (dir) => {
         const cardsLeft = characters.filter(person => !alreadyRemoved.includes(person.name))
         if (cardsLeft.length) {
             const toBeRemoved = cardsLeft[cardsLeft.length - 1].name // Find the card object to be removed
@@ -66,18 +67,20 @@ function ConnectScreen() {
                                 onCardLeftScreen={() => outOfFrame(character.name)}>
                         <View style={styles.card}>
                             <ImageBackground style={styles.cardImage} source={{uri: character.img}}>
-                                <View style={styles.cardTitle} fad>
+                                <LinearGradient start={{x: 1, y: 0}} end={{x: 0.3, y: 0}}
+                                                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']} style={styles.cardTitle}>
                                     <Text style={styles.title}>{character.name}</Text>
-                                </View>
+                                </LinearGradient>
                             </ImageBackground>
                         </View>
                     </TinderCard>
                 )}
             </View>
             <View style={styles.buttons}>
-                <ButtonContained icon="close" iconSize={24} color="red" justIcon={true} onPress={() => swipe('left')}/>
+                <ButtonContained icon="close" iconSize={24} color="red" justIcon={true}
+                                 onPress={() => swipeButtonHandler('left')}/>
                 <ButtonContained icon="heart" iconSize={24} color="green" justIcon={true}
-                                 onPress={() => swipe('right')}/>
+                                 onPress={() => swipeButtonHandler('right')}/>
             </View>
         </View>
     )
@@ -120,7 +123,7 @@ const styles = {
         position: 'absolute',
         bottom: 0,
         width: "100%",
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
     },
     title: {
         margin: 12,
