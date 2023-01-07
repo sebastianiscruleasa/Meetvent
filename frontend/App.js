@@ -20,6 +20,7 @@ import AuthContextProvider, {AuthContext} from "./store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingOverlay from "./components/ui/LoadingOverlay";
 import LocationPicker from "./components/Location/LocationPicker";
+import ChatButton from "./components/ui/ChatButton";
 
 function HomeStackNavigator() {
     return (
@@ -29,6 +30,7 @@ function HomeStackNavigator() {
                     backgroundColor: colors.primary500,
                 },
                 headerTitle: LocationPicker,
+                headerRight: ChatButton,
                 headerTintColor: "white",
                 headerShadowVisible: false
             }}/>
