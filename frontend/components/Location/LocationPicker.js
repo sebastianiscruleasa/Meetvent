@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     currentLocation: {
         flexDirection: "row",
         alignItems: "center",
+        marginBottom: 2
     },
     currentLocationText: {
         color: 'rgba(256,256,256,0.7)'
