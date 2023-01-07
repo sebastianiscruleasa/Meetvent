@@ -2,6 +2,7 @@ package com.chs.meetvent.config;
 
 import com.chs.meetvent.jwt.AuthEntryPointJwt;
 import com.chs.meetvent.jwt.AuthTokenFilter;
+import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,18 +21,20 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
-    UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     private AuthEntryPointJwt unauthorizedHandler;
+    private JwtUtils jwtUtils;
 
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, AuthEntryPointJwt unauthorizedHandler) {
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, AuthEntryPointJwt unauthorizedHandler, JwtUtils jwtUtils) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtUtils = jwtUtils;
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+    public AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
     @Bean
@@ -59,7 +62,7 @@ public class WebSecurityConfig {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterBefore(new AuthTokenFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new AuthTokenFilter(jwtUtils, userDetailsServiceImpl), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/users").authenticated()
                 .requestMatchers("/auth/signup", "/auth/signin").permitAll()
@@ -68,7 +71,7 @@ public class WebSecurityConfig {
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter(jwtUtils, userDetailsServiceImpl), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
