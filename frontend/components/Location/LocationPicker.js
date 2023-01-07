@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {
     getCurrentPositionAsync,
@@ -9,8 +9,9 @@ import {getAddress} from "../../util/location";
 
 function LocationPicker() {
     const [currentLocation, setCurrentLocation] = useState();
+
     async function verifyPermissions() {
-        let { status } = await requestForegroundPermissionsAsync();
+        let {status} = await requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             Alert.alert(
                 'Insufficient Permissions!',
@@ -30,7 +31,8 @@ function LocationPicker() {
 
         const location = await getCurrentPositionAsync();
         const address = await getAddress(location.coords.latitude, location.coords.longitude);
-        setCurrentLocation(address);
+        const displayedAddress = `${address.city}, ${address.country}`
+        setCurrentLocation(displayedAddress);
     }, [])
 
     useEffect(() => {
@@ -40,14 +42,15 @@ function LocationPicker() {
 
     return (
         <View style={styles.container}>
-            {currentLocation && (
-                <View style={styles.currentLocation}>
-                    <Text style={styles.currentLocationText}>Current Location</Text>
-                    <Ionicons name="location-sharp" color="'rgba(256,256,256,0.7)'" size={16}/>
-                </View>
-                )
-            }
-                <Text style={styles.location}>{currentLocation}</Text>
+
+            <View style={styles.currentLocation}>
+                <Text style={styles.currentLocationText}>Current Location</Text>
+                <Ionicons name="location-sharp" color="'rgba(256,256,256,0.7)'" size={16}/>
+            </View>
+
+
+            {!currentLocation && <ActivityIndicator size="small" color="white"/>}
+            {currentLocation && <Text style={styles.location}>{currentLocation}</Text>}
         </View>
     );
 }
@@ -55,8 +58,8 @@ function LocationPicker() {
 export default LocationPicker;
 
 const styles = StyleSheet.create({
-    container:{
-        alignItems:"center",
+    container: {
+        alignItems: "center",
     },
     currentLocation: {
         flexDirection: "row",

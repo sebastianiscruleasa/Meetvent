@@ -9,5 +9,5 @@ export async function getAddress(lat, lng) {
     }
 
     const data = await response.json();
-    return data.region;
+    return {city: data.city, country: data.country};
 }

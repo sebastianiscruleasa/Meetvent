@@ -29,7 +29,8 @@ export default ChatButton;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.primary600,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
         borderRadius: 20
     },
     pressed: {
