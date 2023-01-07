@@ -19,6 +19,7 @@ import {useContext, useEffect, useState} from "react";
 import AuthContextProvider, {AuthContext} from "./store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingOverlay from "./components/ui/LoadingOverlay";
+import LocationPicker from "./components/Location/LocationPicker";
 
 function HomeStackNavigator() {
     return (
@@ -27,6 +28,7 @@ function HomeStackNavigator() {
                 headerStyle: {
                     backgroundColor: colors.primary500,
                 },
+                headerTitle: LocationPicker,
                 headerTintColor: "white",
                 headerShadowVisible: false
             }}/>
