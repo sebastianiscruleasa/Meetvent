@@ -1,14 +1,25 @@
 package com.chs.meetvent.controllers;
 
 import com.chs.meetvent.domain.AppUser;
+import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.repository.AppUserRepository;
+import com.chs.meetvent.service.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,11 +27,14 @@ public class AuthController {
 
     private AppUserRepository appUserRepository;
     private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
+    private JwtUtils jwtUtils;
 
-    public AuthController(AppUserRepository appUserRepository,
-                          PasswordEncoder passwordEncoder) {
+    public AuthController(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/register")
@@ -42,6 +56,39 @@ public class AuthController {
                     .body("An exception occured due to " + ex.getMessage());
         }
         return response;
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@RequestBody AppUser loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        return ResponseEntity.ok((jwt));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser2(@RequestBody AppUser appUser) {
+        if (appUserRepository.existsAppUserByUsername(appUser.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Username is already taken!");
+        }
+
+        if (appUserRepository.existsAppUserByEmail(appUser.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Email is already in use!");
+        }
+
+        // Create new user's account
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        appUserRepository.save(appUser);
+
+        return ResponseEntity.ok("User registered successfully!");
     }
 
 }
