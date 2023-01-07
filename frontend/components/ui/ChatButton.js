@@ -7,7 +7,7 @@ function ChatButton() {
     const navigation = useNavigation();
 
     function onPress() {
-        navigation.navigate('EventDetailScreenHome')
+        navigation.navigate('ChatScreen')
     }
 
     return (
