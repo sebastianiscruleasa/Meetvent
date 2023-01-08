@@ -4,15 +4,23 @@ import {Ionicons} from "@expo/vector-icons";
 import ButtonContained from "../ui/ButtonContained";
 
 import interests from "../../constants/interests";
-import {useState} from "react";
 import SearchDropdown from "./SearchDropdown";
+import {useNavigation} from "@react-navigation/native";
 
-function SearchHome({searchHandler, data}) {
-    const [searchedText, setSearchedText] = useState();
+function SearchHome({searchedText, searchHandler, data}) {
+    const navigation = useNavigation();
+
 
     function onSearchHandler(text) {
-        setSearchedText(text);
         searchHandler(text);
+    }
+
+    function onNavigateHandler(id) {
+        onSearchHandler();
+        navigation.navigate("EventDetailScreenHome", {
+            eventId: id
+        })
+
     }
 
     return (
@@ -20,7 +28,7 @@ function SearchHome({searchHandler, data}) {
             <View style={styles.container}/>
             <View style={styles.searchContainer}>
                 <View style={styles.search}>
-                    <Ionicons name="search" color="white" size={28}/>
+                    <Ionicons name="search" color="white" size={24}/>
                     <TextInput style={styles.input} selectionColor="white" placeholder="Search..."
                                placeholderTextColor="white" value={searchedText} onChangeText={(text) => {
                         onSearchHandler(text)
@@ -33,14 +41,14 @@ function SearchHome({searchHandler, data}) {
                                 ? [styles.closeButtonContainer, styles.pressed]
                                 : [styles.closeButtonContainer]
                         }
-                        onPress={() => onSearchHandler("")
+                        onPress={() => onSearchHandler()
                         }
                     >
                         <Ionicons name="close" color="white" size={20}/>
                     </Pressable>
                 }
             </View>
-            {searchedText && <SearchDropdown data={data}/>}
+            {searchedText && <SearchDropdown data={data} onNavigateHandler={onNavigateHandler}/>}
             {!searchedText &&
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={styles.filtersContainer}>
                     {interests
@@ -92,9 +100,9 @@ const styles = StyleSheet.create({
     },
     closeButtonContainer:{
         backgroundColor: colors.primary600,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderRadius: 20
+        paddingHorizontal: 4,
+        paddingVertical: 2,
+        borderRadius: 16
     },
     pressed: {
         opacity: 0.75,

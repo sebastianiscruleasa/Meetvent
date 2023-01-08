@@ -1,18 +1,9 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
-import { useNavigation } from '@react-navigation/native';
 import colors from "../../constants/colors";
 
-function SearchDropdownCard({id, image, date, title}) {
-    const navigation = useNavigation();
-
-    function pressHandler() {
-        navigation.navigate("EventDetailScreenHome", {
-            eventId: id
-        })
-    }
-
+function SearchDropdownCard({id, image, date, title, onPressHandler}) {
     return (
-        <Pressable onPress={pressHandler} style={({pressed}) =>
+        <Pressable onPress={() => onPressHandler(id)} style={({pressed}) =>
             pressed
                 ? [styles.container, styles.pressed]
                 : [styles.container]

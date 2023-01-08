@@ -1,7 +1,7 @@
 import {StyleSheet, View} from "react-native";
 import EventPreviewList from "../components/Events/EventPreviewList";
 import SearchHome from "../components/Search/SearchHome";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const DUMMY_EVENTS = [
     {
@@ -62,7 +62,7 @@ const DUMMY_EVENTS = [
     },
 ]
 
-function HomeScreen() {
+function HomeScreen({navigation}) {
     const [searchedText, setSearchedText] = useState();
     const [searchedData, setSearchedData] = useState([]);
 
@@ -81,9 +81,17 @@ function HomeScreen() {
         }
     }
 
+    useEffect(() => {
+        navigation.addListener('transitionStart', (e) => {
+            if(e.data.closing) {
+                searchHandler("")
+            }
+        });
+    }, [navigation]);
+
     return (
         <View style={styles.outerContainer}>
-            <SearchHome searchHandler={searchHandler} data={searchedData}/>
+            <SearchHome searchedText={searchedText} searchHandler={searchHandler} data={searchedData}/>
             {searchedText && <View style={styles.searching}/>}
             <View style={styles.innerContainer}>
                 <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>
