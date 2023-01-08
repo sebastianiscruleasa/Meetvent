@@ -63,18 +63,20 @@ const DUMMY_EVENTS = [
 ]
 
 function HomeScreen() {
+    const [searchedText, setSearchedText] = useState();
     const [searchedData, setSearchedData] = useState([]);
 
-    function searchHandler(searchedText) {
-        const searchedTextLowerCase = searchedText.toLowerCase()
-        const resultsList = DUMMY_EVENTS.filter(item => {
-            const eventLowerCase = item.title.toLowerCase();
-            if (eventLowerCase.match(searchedTextLowerCase))
-                return item;
-        })
-        if (!searchedText) {
+    function searchHandler(searched) {
+        setSearchedText(searched);
+        if (!searched) {
             setSearchedData([])
         } else {
+            const searchedTextLowerCase = searched.toLowerCase()
+            const resultsList = DUMMY_EVENTS.filter(item => {
+                const eventLowerCase = item.title.toLowerCase();
+                if (eventLowerCase.match(searchedTextLowerCase))
+                    return item;
+            })
             setSearchedData(resultsList);
         }
     }
@@ -82,7 +84,7 @@ function HomeScreen() {
     return (
         <View style={styles.outerContainer}>
             <SearchHome searchHandler={searchHandler} data={searchedData}/>
-            {searchedData.length !== 0 && <View style={styles.searching}/>}
+            {searchedText && <View style={styles.searching}/>}
             <View style={styles.innerContainer}>
                 <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>
                 <EventPreviewList title="Your Upcoming Events" list={DUMMY_EVENTS}/>
