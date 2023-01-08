@@ -87,7 +87,7 @@ public class AuthController {
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUserRepository.save(appUser);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(new AuthTokenDTO("User registered successfully!"));
     }
 
     @GetMapping("/test")
