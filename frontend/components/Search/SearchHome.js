@@ -16,7 +16,7 @@ function SearchHome({searchHandler, data}) {
     }
 
     return (
-        <View>
+        <View style={styles.absoluteContainer}>
             <View style={styles.container}/>
             <View style={styles.searchContainer}>
                 <View style={styles.search}>
@@ -55,6 +55,11 @@ function SearchHome({searchHandler, data}) {
 export default SearchHome;
 
 const styles = StyleSheet.create({
+    absoluteContainer: {
+        position:"absolute",
+        width: "100%",
+        zIndex:3
+    },
     container: {
         height: 80,
         width: "100%",

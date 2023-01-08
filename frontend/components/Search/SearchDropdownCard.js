@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 8,
         marginVertical: 4,
-        marginHorizontal: 16
+        marginHorizontal: 4
     },
     imageContainer: {
         width: 50,
