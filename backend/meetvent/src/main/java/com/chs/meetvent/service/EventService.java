@@ -12,4 +12,5 @@ public interface EventService {
     Event saveEvent(Event event);
     void deleteEventById(Long id);
     List<AppUser> getUserForEvents(String id);
+    List<Event> getEventsFromCity(String city);
 }

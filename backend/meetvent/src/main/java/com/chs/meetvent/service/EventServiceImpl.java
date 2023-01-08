@@ -44,4 +44,8 @@ public class EventServiceImpl implements EventService{
         Optional<Event> event = this.eventRepository.findById(Long.parseLong(id));
         return event.get().getAttendees();
     }
+
+    public List<Event> getEventsFromCity(String cityName) {
+        return this.eventRepository.findAllByAddress_City(cityName);
+    }
 }

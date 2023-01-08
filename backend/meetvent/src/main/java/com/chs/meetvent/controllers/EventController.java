@@ -53,4 +53,9 @@ public class EventController {
     public List<AppUser> getUsersForEvent(@PathVariable String id) {
         return this.eventService.getUserForEvents(id);
     }
+
+    @GetMapping("city/{name}")
+    public List<Event> getEventsFromCity(@PathVariable String name) {
+        return this.eventService.getEventsFromCity(name);
+    }
 }

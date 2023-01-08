@@ -80,7 +80,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new AuthTokenFilter(jwtUtils, userDetailsServiceImpl), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/users", "/events" ,"/events/{id}", "/users/events/{id}","/users/events", "/events/{id}/users").authenticated()
+                .requestMatchers("/users", "/events" ,"/events/{id}", "/users/events/{id}","/users/events", "/events/{id}/users", "/events/city/{name}").authenticated()
                 .requestMatchers("/auth/signup", "/auth/signin", "/auth/test").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
