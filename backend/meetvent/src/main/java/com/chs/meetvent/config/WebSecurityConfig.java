@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new AuthTokenFilter(jwtUtils, userDetailsServiceImpl), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/users").authenticated()
+                .requestMatchers("/users", "/events" ,"/events/{id}", "/users/events/{id}").authenticated()
                 .requestMatchers("/auth/signup", "/auth/signin").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
