@@ -1,6 +1,7 @@
-import {StyleSheet, View} from "react-native";
+import {View} from "react-native";
 import EventPreviewList from "../components/Events/EventPreviewList";
 import SearchHome from "../components/Search/SearchHome";
+import {useState} from "react";
 
 const DUMMY_EVENTS = [
     {
@@ -62,16 +63,29 @@ const DUMMY_EVENTS = [
 ]
 
 function HomeScreen() {
+    const [searchedData, setSearchedData] = useState([]);
+
+    function searchHandler(searchedText) {
+        const searchedTextLowerCase = searchedText.toLowerCase()
+        const resultsList = DUMMY_EVENTS.filter(item => {
+            const eventLowerCase = item.title.toLowerCase();
+            if (eventLowerCase.match(searchedTextLowerCase))
+                return item;
+        })
+        if (!searchedText) {
+            setSearchedData([])
+        } else {
+            setSearchedData(resultsList);
+        }
+    }
 
     return (
         <View>
-            <SearchHome/>
-            <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>
-            <EventPreviewList title="Your Upcoming Events" list={DUMMY_EVENTS}/>
+            <SearchHome searchHandler={searchHandler} data={searchedData}/>
+            {!searchedData.length && <EventPreviewList title="Trending" list={DUMMY_EVENTS}/>}
+            {!searchedData.length && <EventPreviewList title="Your Upcoming Events" list={DUMMY_EVENTS}/>}
         </View>
     )
 }
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({})

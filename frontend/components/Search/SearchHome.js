@@ -1,11 +1,20 @@
-import {ScrollView, StyleSheet, TextInput, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, TextInput, View} from "react-native";
 import colors from "../../constants/colors";
 import {Ionicons} from "@expo/vector-icons";
 import ButtonContained from "../ui/ButtonContained";
 
 import interests from "../../constants/interests";
+import {useState} from "react";
+import SearchDropdown from "./SearchDropdown";
 
-function SearchHome() {
+function SearchHome({searchHandler, data}) {
+    const [searchedText, setSearchedText] = useState();
+
+    function onSearchHandler(text) {
+        setSearchedText(text);
+        searchHandler(text);
+    }
+
     return (
         <View>
             <View style={styles.container}/>
@@ -13,16 +22,32 @@ function SearchHome() {
                 <View style={styles.search}>
                     <Ionicons name="search" color="white" size={36}/>
                     <TextInput style={styles.input} selectionColor="white" placeholder="Search..."
-                               placeholderTextColor="white"/>
+                               placeholderTextColor="white" value={searchedText} onChangeText={(text) => {
+                        onSearchHandler(text)
+                    }}/>
                 </View>
-                <ButtonContained icon="filter" color={colors.primary600}>Filters</ButtonContained>
+                {searchedText &&
+                    <Pressable
+                        style={({pressed}) =>
+                            pressed
+                                ? [styles.closeButtonContainer, styles.pressed]
+                                : [styles.closeButtonContainer]
+                        }
+                        onPress={() => onSearchHandler("")
+                        }
+                    >
+                        <Ionicons name="close" color="white" size={20}/>
+                    </Pressable>
+                }
             </View>
-            <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={styles.filtersContainer}>
-                {interests
-                    .map((interest) => <ButtonContained key={interest.key}
-                                                        color={interest.color}
-                                                        icon={interest.icon}>{interest.name}</ButtonContained>)}
-            </ScrollView>
+            {searchedText && <SearchDropdown data={data}/>}
+            {!searchedText &&
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={styles.filtersContainer}>
+                    {interests
+                        .map((interest) => <ButtonContained key={interest.key}
+                                                            color={interest.color}
+                                                            icon={interest.icon}>{interest.name}</ButtonContained>)}
+                </ScrollView>}
         </View>
     )
 }
@@ -59,5 +84,14 @@ const styles = StyleSheet.create({
     },
     filtersContainer: {
         marginTop: 8
-    }
+    },
+    closeButtonContainer:{
+        backgroundColor: colors.primary600,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderRadius: 20
+    },
+    pressed: {
+        opacity: 0.75,
+    },
 })
