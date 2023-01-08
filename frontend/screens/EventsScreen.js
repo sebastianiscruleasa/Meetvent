@@ -1,4 +1,4 @@
-import {Alert, FlatList} from "react-native";
+import {Alert, FlatList, StyleSheet, Text} from "react-native";
 import EventCard from "../components/Events/EventCard";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
@@ -38,6 +38,10 @@ function EventsScreen() {
         return <LoadingOverlay/>;
     }
 
+    if(events.length === 0){
+        return <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>;
+    }
+
     return (
         <FlatList data={events} keyExtractor={(event) => event.id} renderItem={(itemData) =>
             <EventCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
@@ -48,3 +52,12 @@ function EventsScreen() {
 }
 
 export default EventsScreen;
+
+const styles = StyleSheet.create({
+    noEventsText: {
+        fontWeight: "bold",
+        textAlign: "center",
+        marginTop: 24,
+        fontSize: 24,
+    }
+})
