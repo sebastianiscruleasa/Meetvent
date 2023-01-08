@@ -2,6 +2,9 @@ package com.chs.meetvent.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -10,6 +13,12 @@ public class AppUser {
     private String email;
     private String username;
     private String password;
+    @Lob
+    private Byte[] image;
+    @Lob
+    private String description;
+    @ManyToMany(mappedBy = "appUserList")
+    private List<Event> eventList = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -41,5 +50,21 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(Byte[] image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
