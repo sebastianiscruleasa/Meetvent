@@ -4,11 +4,13 @@ import {
     getCurrentPositionAsync,
     requestForegroundPermissionsAsync,
 } from "expo-location";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {getAddress} from "../../util/location";
+import {AuthContext} from "../../store/auth-context";
 
 function LocationPicker() {
     const [currentLocation, setCurrentLocation] = useState();
+    const authCtx = useContext(AuthContext);
 
     async function verifyPermissions() {
         let {status} = await requestForegroundPermissionsAsync();
@@ -31,7 +33,8 @@ function LocationPicker() {
 
         const location = await getCurrentPositionAsync();
         const address = await getAddress(location.coords.latitude, location.coords.longitude);
-        const displayedAddress = `${address.city}, ${address.country}`
+        authCtx.locateUser(address.city);
+        const displayedAddress = `${address.city}, ${address.country}`;
         setCurrentLocation(displayedAddress);
     }, [])
 
