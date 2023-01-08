@@ -1,6 +1,7 @@
 package com.chs.meetvent.controllers;
 
 import com.chs.meetvent.domain.AppUser;
+import com.chs.meetvent.domain.dto.AuthTokenDTO;
 import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.repository.AppUserRepository;
 import com.chs.meetvent.service.UserDetailsImpl;
@@ -67,7 +68,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok((jwt));
+        return ResponseEntity.ok(new AuthTokenDTO(jwt));
     }
 
     @PostMapping("/signup")
