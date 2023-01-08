@@ -34,6 +34,7 @@ function RegisterForm({onAuthenticate}) {
     }
 
     function submitHandler() {
+        const username = credentials.username.value.trim();
         const email = credentials.email.value.trim();
         const password = credentials.password.value.trim();
 
@@ -57,7 +58,7 @@ function RegisterForm({onAuthenticate}) {
             });
             return;
         }
-        onAuthenticate({ email, password });
+        onAuthenticate({username, email, password });
     }
 
     return (

@@ -18,10 +18,18 @@ function LoginScreen({navigation}) {
     async function loginHandler({ email, password }) {
         setIsAuthenticating(true);
         try {
-            //const token = await loginRequest(email, password);
-            // authCtx.authenticate(token);
-            console.log(`${email}+${password}`);
-            authCtx.authenticate(`${email}+${password}`);
+            const response = await fetch("http://localhost:8080/auth/signin", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            const data = await response.json();
+            authCtx.authenticate(data.token);
         } catch (error) {
             Alert.alert(
                 'Authentication failed!',

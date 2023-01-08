@@ -15,13 +15,22 @@ function RegisterScreen({navigation}) {
 
     const authCtx = useContext(AuthContext);
 
-    async function signupHandler({ email, password }) {
+    async function signupHandler({ username, email, password }) {
         setIsAuthenticating(true);
         try {
-            // const token = await registerRequest(email, password);
-            // authCtx.authenticate(token);
-            console.log(`${email}+${password}`);
-            authCtx.authenticate(`${email}+${password}`);
+            const response = await fetch("http://localhost:8080/auth/signup", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            const data = await response.json();
+            authCtx.authenticate(data.token);
         } catch (error) {
             Alert.alert(
                 'Authentication failed',
