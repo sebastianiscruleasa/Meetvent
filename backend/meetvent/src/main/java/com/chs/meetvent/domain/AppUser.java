@@ -1,11 +1,15 @@
 package com.chs.meetvent.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="users")
 public class AppUser extends BaseEntity{
     private String email;
     private String username;
@@ -14,8 +18,9 @@ public class AppUser extends BaseEntity{
     private Byte[] image;
     @Lob
     private String description;
-    @ManyToMany(mappedBy = "appUserList")
-    private List<Event> eventList = new ArrayList<>();
+    @ManyToMany(mappedBy = "attendees", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Event> events = new ArrayList<>();
 
     public String getEmail() {
         return this.email;
@@ -55,5 +60,18 @@ public class AppUser extends BaseEntity{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public void saveEvent(Event event) {
+        event.getAttendees().add(this);
+        this.getEvents().add(event);
     }
 }
