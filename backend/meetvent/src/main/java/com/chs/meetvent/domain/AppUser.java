@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class AppUser {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private Long id;
+public class AppUser extends BaseEntity{
     private String email;
     private String username;
     private String password;
@@ -19,14 +16,6 @@ public class AppUser {
     private String description;
     @ManyToMany(mappedBy = "appUserList")
     private List<Event> eventList = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return this.email;
