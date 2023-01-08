@@ -8,7 +8,7 @@ const DUMMY_EVENTS = [
         id: 1,
         image: "https://media.resources.festicket.com/www/photos/3694-artwork.jpg",
         date: {day: 10, month: "JUNE"},
-        title: "International Gala Music Festival",
+        title: "Untold",
         location: "36 Guild Street London, UK"
     },
     {
@@ -22,21 +22,21 @@ const DUMMY_EVENTS = [
         id: 3,
         image: "https://media.resources.festicket.com/www/photos/3694-artwork.jpg",
         date: {day: 10, month: "JUNE"},
-        title: "International Gala Music Festival",
+        title: "Summerwell",
         location: "36 Guild Street London, UK"
     },
     {
         id: 4,
         image: "https://media.resources.festicket.com/www/photos/3694-artwork.jpg",
         date: {day: 10, month: "JUNE"},
-        title: "International Gala Music Festival",
+        title: "Fall in Love Festival",
         location: "36 Guild Street London, UK"
     },
     {
         id: 5,
         image: "https://media.resources.festicket.com/www/photos/3694-artwork.jpg",
         date: {day: 10, month: "JUNE"},
-        title: "International Gala Music Festival",
+        title: "Electric Castle",
         location: "36 Guild Street London, UK"
     },
     {

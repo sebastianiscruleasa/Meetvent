@@ -20,7 +20,7 @@ function SearchHome({searchHandler, data}) {
             <View style={styles.container}/>
             <View style={styles.searchContainer}>
                 <View style={styles.search}>
-                    <Ionicons name="search" color="white" size={36}/>
+                    <Ionicons name="search" color="white" size={28}/>
                     <TextInput style={styles.input} selectionColor="white" placeholder="Search..."
                                placeholderTextColor="white" value={searchedText} onChangeText={(text) => {
                         onSearchHandler(text)
@@ -56,7 +56,7 @@ export default SearchHome;
 
 const styles = StyleSheet.create({
     container: {
-        height: 90,
+        height: 80,
         width: "100%",
         position: "absolute",
         backgroundColor: colors.primary500,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     input: {
         marginLeft: 8,
         color: "white",
-        fontSize: 24,
+        fontSize: 20,
         borderLeftWidth: 2,
         borderColor: "white",
         paddingLeft: 8
