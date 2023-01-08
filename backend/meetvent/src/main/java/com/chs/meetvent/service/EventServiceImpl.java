@@ -38,4 +38,10 @@ public class EventServiceImpl implements EventService{
     public void deleteEventById(Long id) {
         this.eventRepository.deleteById(id);
     }
+
+    @Override
+    public List<AppUser> getUserForEvents(String id) {
+        Optional<Event> event = this.eventRepository.findById(Long.parseLong(id));
+        return event.get().getAttendees();
+    }
 }
