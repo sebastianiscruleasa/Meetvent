@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Date;
 
 @Component
@@ -21,8 +22,10 @@ public class JwtUtils {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         SecretKey key = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
-        return Jwts.builder()
-                .setSubject((userPrincipal.getEmail()))
+        return Jwts.builder().setSubject(userPrincipal.getEmail())
+                .claim("id", userPrincipal.getId())
+                .claim("email", userPrincipal.getEmail())
+                .claim("username", userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + SecurityConstants.JWT_EXPIRATION_MS))
                 .signWith(key)
