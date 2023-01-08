@@ -2,6 +2,7 @@ package com.chs.meetvent.controllers;
 
 import com.chs.meetvent.domain.AppUser;
 import com.chs.meetvent.domain.dto.AuthTokenDTO;
+import com.chs.meetvent.domain.dto.TestDTO;
 import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.repository.AppUserRepository;
 import com.chs.meetvent.service.UserDetailsImpl;
@@ -90,8 +91,8 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public String testController() {
-        return "test";
+    public TestDTO testController() {
+        return new TestDTO("test");
     }
 
 }
