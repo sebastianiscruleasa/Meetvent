@@ -6,8 +6,12 @@ import com.chs.meetvent.domain.Event;
 import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.service.AppUserService;
 import com.chs.meetvent.service.EventService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,15 +37,23 @@ public class EventController {
 
     @GetMapping("{id}")
     public Optional<Event> getEventById(@PathVariable String id) {
-        return this.eventService.getEventById(id);
+        Optional<Event> event =  this.eventService.getEventById(id);
+        System.out.println(event);
+        if(event.isEmpty()) {
+            throw new EntityNotFoundException("Nu exista eveniment cu id-ul " + id);
+        }
+        System.out.println(event);
+        return event;
     }
 
     @PostMapping()
-    public void saveEvent(@RequestBody Event event, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+    public ResponseEntity<Event> saveEvent(@RequestBody Event event, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
         Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
         event.setOrganizer(appUser.get());
-        this.eventService.saveEvent(event);
+        Event savedEvent  = this.eventService.saveEvent(event);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(savedEvent.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("{id}")
