@@ -52,8 +52,9 @@ public class EventController {
         Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
         event.setOrganizer(appUser.get());
         Event savedEvent  = this.eventService.saveEvent(event);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(savedEvent.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedEvent.getId()).toUri();
+        System.out.println(location);
+        return ResponseEntity.created(location).body(savedEvent);
     }
 
     @DeleteMapping("{id}")

@@ -1,8 +1,6 @@
 package com.chs.meetvent.domain;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -13,12 +11,13 @@ import java.util.List;
 public class AppUser extends BaseEntity{
     private String email;
     private String username;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Lob
     private Byte[] image;
     @Lob
     private String description;
-    @ManyToMany(mappedBy = "attendees", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "attendees")
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
