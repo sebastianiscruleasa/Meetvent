@@ -3,14 +3,20 @@ package com.chs.meetvent.controllers;
 import com.chs.meetvent.constants.SecurityConstants;
 import com.chs.meetvent.domain.AppUser;
 import com.chs.meetvent.domain.Event;
+import com.chs.meetvent.domain.dto.JSONMessageResponse;
 import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.service.AppUserService;
 import com.chs.meetvent.service.EventService;
+import com.chs.meetvent.service.ImageUtils;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -70,5 +76,12 @@ public class EventController {
     @GetMapping("city/{name}")
     public List<Event> getEventsFromCity(@PathVariable String name) {
         return this.eventService.getEventsFromCity(name);
+    }
+
+    @PostMapping(path="/{id}/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> updateProfile(@PathVariable String id, @ModelAttribute MultipartFile image) throws IOException {
+        Optional<Event> event = this.eventService.getEventById(id);
+        event.get().setImage(ImageUtils.compressImage(image.getBytes()));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONMessageResponse("Added image to event with id="+id));
     }
 }

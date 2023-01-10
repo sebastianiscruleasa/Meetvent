@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,9 +20,14 @@ public class Event extends BaseEntity{
     @JsonIgnore
     private List<AppUser> attendees = new ArrayList<>();
     private LocalDate date;
-
+    private String time;
+    private String location;
     @Embedded
     private Address address;
+    @JsonIgnore
+    @Lob
+    @Column(name="image", length = 1000)
+    private byte[] image;
 
     public Address getAddress() {
         return address;
@@ -63,5 +67,29 @@ public class Event extends BaseEntity{
 
     public void setAttendees(List<AppUser> attendees) {
         this.attendees = attendees;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
