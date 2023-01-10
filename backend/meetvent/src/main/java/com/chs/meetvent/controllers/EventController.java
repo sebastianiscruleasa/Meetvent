@@ -8,7 +8,6 @@ import com.chs.meetvent.service.AppUserService;
 import com.chs.meetvent.service.EventService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

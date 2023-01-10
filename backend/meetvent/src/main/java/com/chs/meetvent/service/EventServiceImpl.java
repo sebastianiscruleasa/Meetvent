@@ -49,6 +49,7 @@ public class EventServiceImpl implements EventService{
         return attendees;
     }
 
+    @Transactional
     public List<Event> getEventsFromCity(String cityName) {
         return this.eventRepository.findAllByAddress_City(cityName);
     }

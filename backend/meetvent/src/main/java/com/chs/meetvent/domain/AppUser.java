@@ -18,7 +18,6 @@ public class AppUser extends BaseEntity{
     @Column(name="image", length = 1000)
     private byte[] image;
     @Lob
-    @JsonIgnore
     private String description;
     @ManyToMany(mappedBy = "attendees")
     @JsonIgnore
