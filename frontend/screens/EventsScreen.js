@@ -1,12 +1,14 @@
-import {Alert, FlatList, StyleSheet, Text} from "react-native";
+import {Alert, FlatList, StyleSheet, Text, View} from "react-native";
 import EventCard from "../components/Events/EventCard";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {useCallback, useContext, useEffect, useState} from "react";
+import FiltersDropdown from "../components/Events/Filters/FiltersDropdown";
 
-function EventsScreen() {
+function EventsScreen({filtersDropdown}) {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
+    const [activeFilters, setActiveFilters] = useState([]);
 
     const authCtx = useContext(AuthContext);
 
@@ -42,12 +44,23 @@ function EventsScreen() {
         return <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>;
     }
 
+    function onPressFilter(id) {
+        if (!activeFilters.includes(id)) {
+            setActiveFilters(prevState => [...prevState, id])
+        } else {
+            setActiveFilters((prevState => prevState.filter(interestId => interestId !== id)))
+        }
+    }
+
     return (
-        <FlatList data={events} keyExtractor={(event) => event.id} renderItem={(itemData) =>
-            <EventCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
-                       date={itemData.item.date}
-                       location={itemData.item.location}/>
-        }/>
+        <View>
+            {filtersDropdown && <FiltersDropdown activeFilters={activeFilters} onPressFilter={onPressFilter}/>}
+            <FlatList data={events} keyExtractor={(event) => event.id} renderItem={(itemData) =>
+                <EventCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
+                           date={itemData.item.date}
+                           location={itemData.item.location}/>
+            }/>
+        </View>
     )
 }
 

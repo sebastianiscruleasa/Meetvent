@@ -22,6 +22,7 @@ import LoadingOverlay from "./components/ui/LoadingOverlay";
 import LocationPicker from "./components/Location/LocationPicker";
 import ChatButton from "./components/ui/ChatButton";
 import ChatScreen from "./screens/ChatScreen";
+import FiltersButton from "./components/Events/Filters/FiltersButton";
 
 function HomeStackNavigator() {
     return (
@@ -42,113 +43,124 @@ function HomeStackNavigator() {
                 title: "Chat"
             }}/>
         </Stack.Navigator>
-)
+    )
 }
 
-function EventsStackNavigator()
-    {
-        return (
-            <Stack.Navigator>
-                <Stack.Screen name="Events" component={EventsScreen}/>
-                <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen}/>
-            </Stack.Navigator>
-        )
-    }
+function EventsStackNavigator() {
+    const [filtersDropdownActive, setFilterDropdownActive] = useState(false);
 
-function AuthenticatedNavigator()
-    {
-        return (
-            <Tab.Navigator
-                screenOptions={{
-                    tabBarActiveTintColor: colors.primary500
-                }}
-            >
-                <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{
-                    title: "Home",
-                    headerShown: false,
-                    tabBarIcon: ({color, size}) => (
-                        <Ionicons name="home" color={color} size={size}/>
-                    ),
-                }}/>
-                <Tab.Screen name="EventsStack" component={EventsStackNavigator} options={{
-                    title: "Events",
-                    headerShown: false,
-                    tabBarIcon: ({color, size}) => (
-                        <Ionicons name="calendar" color={color} size={size}/>
-                    ),
-                }}/>
-                <Tab.Screen name="Connect" component={ConnectScreen} options={{
-                    tabBarIcon: ({color, size}) => (
-                        <Ionicons name="infinite" color={color} size={size}/>
-                    ),
-                }}/>
-                <Tab.Screen name="Profile" component={ProfileScreen} options={{
-                    tabBarIcon: ({color, size}) => (
-                        <Ionicons name="person" color={color} size={size}/>
-                    ),
-                }}/>
-            </Tab.Navigator>
-        )
-    }
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Events" options={{
+                headerRight: () => {
+                    return (<FiltersButton onPress={() =>
+                        setFilterDropdownActive(
+                            prevState => !prevState
+                        )
 
-function AuthNavigator()
-    {
-        return (
-            <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginScreen} options={{
-                    headerShown: false,
-                }}/>
-                <Stack.Screen name="Register" component={RegisterScreen} options={{
-                    headerShown: false,
-                }}/>
-            </Stack.Navigator>
-        )
-    }
-
-function Navigation()
-    {
-        const authCtx = useContext(AuthContext);
-
-        return (
-            <NavigationContainer>
-                {!authCtx.isAuthenticated && <AuthNavigator/>}
-                {authCtx.isAuthenticated && <AuthenticatedNavigator/>}
-            </NavigationContainer>
-        )
-    }
-
-function Root()
-    {
-        const [isTryingLogin, setIsTryingLogin] = useState(true);
-
-        const authCtx = useContext(AuthContext);
-
-        useEffect(() => {
-            async function fetchToken() {
-                const storedToken = await AsyncStorage.getItem('token');
-
-                if (storedToken) {
-                    authCtx.authenticate(storedToken);
+                    }/>)
                 }
+            }}>
+                {
+                    () => {
+                        return (<EventsScreen filtersDropdown={filtersDropdownActive}/>)
+                    }
+                }
+            </Stack.Screen>
+            <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen}/>
+        </Stack.Navigator>
+    )
+}
 
-                setIsTryingLogin(false);
+function AuthenticatedNavigator() {
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                tabBarActiveTintColor: colors.primary500
+            }}
+        >
+            <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{
+                title: "Home",
+                headerShown: false,
+                tabBarIcon: ({color, size}) => (
+                    <Ionicons name="home" color={color} size={size}/>
+                ),
+            }}/>
+            <Tab.Screen name="EventsStack" component={EventsStackNavigator} options={{
+                title: "Events",
+                headerShown: false,
+                tabBarIcon: ({color, size}) => (
+                    <Ionicons name="calendar" color={color} size={size}/>
+                ),
+            }}/>
+            <Tab.Screen name="Connect" component={ConnectScreen} options={{
+                tabBarIcon: ({color, size}) => (
+                    <Ionicons name="infinite" color={color} size={size}/>
+                ),
+            }}/>
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{
+                tabBarIcon: ({color, size}) => (
+                    <Ionicons name="person" color={color} size={size}/>
+                ),
+            }}/>
+        </Tab.Navigator>
+    )
+}
+
+function AuthNavigator() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginScreen} options={{
+                headerShown: false,
+            }}/>
+            <Stack.Screen name="Register" component={RegisterScreen} options={{
+                headerShown: false,
+            }}/>
+        </Stack.Navigator>
+    )
+}
+
+function Navigation() {
+    const authCtx = useContext(AuthContext);
+
+    return (
+        <NavigationContainer>
+            {!authCtx.isAuthenticated && <AuthNavigator/>}
+            {authCtx.isAuthenticated && <AuthenticatedNavigator/>}
+        </NavigationContainer>
+    )
+}
+
+function Root() {
+    const [isTryingLogin, setIsTryingLogin] = useState(true);
+
+    const authCtx = useContext(AuthContext);
+
+    useEffect(() => {
+        async function fetchToken() {
+            const storedToken = await AsyncStorage.getItem('token');
+
+            if (storedToken) {
+                authCtx.authenticate(storedToken);
             }
 
-            fetchToken();
-        }, []);
-
-        if (isTryingLogin) {
-            return <LoadingOverlay/>;
+            setIsTryingLogin(false);
         }
 
-        return <Navigation/>;
+        fetchToken();
+    }, []);
+
+    if (isTryingLogin) {
+        return <LoadingOverlay/>;
     }
 
-export default function App()
-    {
-        return (
-            <AuthContextProvider>
-                <Root/>
-            </AuthContextProvider>
-        );
-    }
+    return <Navigation/>;
+}
+
+export default function App() {
+    return (
+        <AuthContextProvider>
+            <Root/>
+        </AuthContextProvider>
+    );
+}
