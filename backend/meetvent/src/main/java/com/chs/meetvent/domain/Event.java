@@ -13,7 +13,7 @@ public class Event extends BaseEntity{
     @ManyToOne
     @JoinColumn(name="organizer_id")
     private AppUser organizer;
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "event_user",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

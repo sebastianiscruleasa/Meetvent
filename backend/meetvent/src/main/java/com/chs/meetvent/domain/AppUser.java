@@ -13,11 +13,14 @@ public class AppUser extends BaseEntity{
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonIgnore
     @Lob
-    private Byte[] image;
+    @Column(name="image", length = 1000)
+    private byte[] image;
     @Lob
+    @JsonIgnore
     private String description;
-    @ManyToMany(mappedBy = "attendees")
+    @ManyToMany(mappedBy = "attendees", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
@@ -45,11 +48,11 @@ public class AppUser extends BaseEntity{
         this.password = password;
     }
 
-    public Byte[] getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
