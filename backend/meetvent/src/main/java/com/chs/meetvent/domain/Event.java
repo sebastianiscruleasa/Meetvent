@@ -2,6 +2,7 @@ package com.chs.meetvent.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Event extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<AppUser> attendees = new ArrayList<>();
-    private Date date;
+    private LocalDate date;
 
     @Embedded
     private Address address;
@@ -40,11 +41,11 @@ public class Event extends BaseEntity{
         this.title = title;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
