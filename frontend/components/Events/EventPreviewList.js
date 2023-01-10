@@ -8,7 +8,7 @@ function EventPreviewList({title, list}) {
             <FlatList showsHorizontalScrollIndicator={false} horizontal={true} data={list}
                       keyExtractor={(event) => event.id} renderItem={(itemData) =>
                 <EventsPreviewCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
-                                   date={itemData.item.date.day}
+                                   date={itemData.item.date}
                                    location={itemData.item.location}/>
             }/>
         </View>
