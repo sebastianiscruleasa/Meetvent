@@ -3,6 +3,7 @@ package com.chs.meetvent.service;
 import com.chs.meetvent.domain.AppUser;
 import com.chs.meetvent.domain.Event;
 import com.chs.meetvent.repository.EventRepository;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class EventServiceImpl implements EventService{
     public List<AppUser> getUserForEvents(String id) {
         Optional<Event> event = this.eventRepository.findById(Long.parseLong(id));
         List<AppUser> attendees = event.get().getAttendees();
+        Hibernate.initialize(attendees);
         return attendees;
     }
 
