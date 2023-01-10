@@ -7,7 +7,7 @@ import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function RegisterScreen({navigation}) {
-    function switchToLoginHandler(){
+    function switchToLoginHandler() {
         navigation.replace('Login')
     }
 
@@ -15,33 +15,33 @@ function RegisterScreen({navigation}) {
 
     const authCtx = useContext(AuthContext);
 
-    async function signupHandler({ username, email, password }) {
+    async function signupHandler({username, email, password}) {
         setIsAuthenticating(true);
-        try {
-            const response = await fetch("http://localhost:8080/auth/signup", {
-                method: "POST",
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            const data = await response.json();
-            authCtx.authenticate(data.token);
-        } catch (error) {
+        const response = await fetch("http://localhost:8080/auth/signup", {
+            method: "POST",
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        if (!response.ok) {
             Alert.alert(
                 'Authentication failed',
-                'Could not create user, please check your input and try again later.'
+                'Username/Email Address already in use!'
             );
             setIsAuthenticating(false);
+        } else {
+            const data = await response.json();
+            authCtx.authenticate(data.token);
         }
     }
 
     if (isAuthenticating) {
-        return <LoadingOverlay message="Creating user..." />;
+        return <LoadingOverlay message="Creating user..."/>;
     }
 
     return (
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         height: "100%",
         justifyContent: "space-evenly",
-        paddingHorizontal:24,
+        paddingHorizontal: 24,
     },
     logoContainer: {
         marginTop: 36,
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
         width: 200,
         height: 80
     },
-    bottomContainer:{
-        marginBottom:36
+    bottomContainer: {
+        marginBottom: 36
     },
     bottomTextContainer: {
         marginVertical: 24,

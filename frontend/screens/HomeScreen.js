@@ -9,6 +9,8 @@ function HomeScreen({navigation}) {
     const [searchedText, setSearchedText] = useState();
     const [searchedData, setSearchedData] = useState([]);
 
+    const [events, setEvents] = useState([]);
+
     function searchHandler(searched) {
         setSearchedText(searched);
         if (!searched) {
@@ -17,8 +19,7 @@ function HomeScreen({navigation}) {
             const searchedTextLowerCase = searched.toLowerCase()
             const resultsList = events.filter(item => {
                 const eventLowerCase = item.title.toLowerCase();
-                if (eventLowerCase.match(searchedTextLowerCase))
-                    return item;
+                if (eventLowerCase.match(searchedTextLowerCase)) return item;
             })
             setSearchedData(resultsList);
         }
@@ -26,49 +27,49 @@ function HomeScreen({navigation}) {
 
     useEffect(() => {
         navigation.addListener('transitionStart', (e) => {
-            if(e.data.closing) {
+            if (e.data.closing) {
                 searchHandler("")
             }
         });
     }, [navigation]);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [events, setEvents] = useState([]);
 
     const authCtx = useContext(AuthContext);
 
     const fetchEvents = useCallback(async () => {
         setIsLoading(true);
-        try {
+        if (authCtx.city) {
             const response = await fetch(`http://localhost:8080/events/city/${authCtx.city}`, {
                 headers: {
                     "Authorization": `Bearer ${authCtx.token}`
                 },
             })
-            const data = await response.json();
-            setEvents(data);
-            setIsLoading(false);
-        } catch (error) {
-            Alert.alert(
-                'Something went wrong!',
-                'Please try again later!'
-            );
-            setIsLoading(false);
+            if (!response.ok) {
+                Alert.alert('Something went wrong!', 'Please try again later!');
+                setIsLoading(false);
+            } else {
+                const data = await response.json();
+                setEvents(data);
+                setIsLoading(false);
+            }
         }
-    },[])
+    }, [authCtx.city])
 
     useEffect(() => {
         fetchEvents();
     }, [fetchEvents])
 
-    if (isLoading) {
-        return <LoadingOverlay/>;
+    if (isLoading || events.length === 0) {
+        return (
+            <View style={styles.outerContainer}>
+                <SearchHome searchedText={searchedText} searchHandler={searchHandler} data={searchedData}/>
+                {isLoading && <LoadingOverlay/>}
+                {(events.length === 0 && !isLoading) &&
+                    <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>}
+            </View>
+        )
     }
-
-    if(events.length === 0){
-        return <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>;
-    }
-
 
     return (
         <View style={styles.outerContainer}>
@@ -87,15 +88,15 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     outerContainer: {
         flex: 1
-    },
-    innerContainer: {
+    }, innerContainer: {
         marginTop: 100
+    }, searching: {
+        backgroundColor: 'rgba(0,0,0,0.5)', position: "absolute", height: "100%", width: "100%", zIndex: 2
     },
-    searching: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        position: "absolute",
-        height: "100%",
-        width: "100%",
-        zIndex: 2
+    noEventsText: {
+        fontWeight: "bold",
+        textAlign: "center",
+        marginTop: 150,
+        fontSize: 24,
     }
 })

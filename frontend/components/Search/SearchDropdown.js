@@ -9,7 +9,7 @@ function SearchDropdown({data, onNavigateHandler}) {
                 <FlatList data={data} keyExtractor={(event) => event.id} renderItem={(itemData) =>
                     <SearchDropdownCard id={itemData.item.id} image={itemData.item.image}
                                         title={itemData.item.title}
-                                        date={`${itemData.item.date.day} ${itemData.item.date.month}`} onPressHandler={onNavigateHandler}/>
+                                        date={`${itemData.item.date} ${itemData.item.date}`} onPressHandler={onNavigateHandler}/>
                 }/>}
             {data.length === 0 &&
                 <View style={styles.emptyContainer}>

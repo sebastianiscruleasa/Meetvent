@@ -7,7 +7,7 @@ import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function LoginScreen({navigation}) {
-    function switchToRegisterHandler(){
+    function switchToRegisterHandler() {
         navigation.replace('Register')
     }
 
@@ -15,32 +15,32 @@ function LoginScreen({navigation}) {
 
     const authCtx = useContext(AuthContext);
 
-    async function loginHandler({ email, password }) {
+    async function loginHandler({email, password}) {
         setIsAuthenticating(true);
-        try {
-            const response = await fetch("http://localhost:8080/auth/signin", {
-                method: "POST",
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            const data = await response.json();
-            authCtx.authenticate(data.token);
-        } catch (error) {
+        const response = await fetch("http://localhost:8080/auth/signin", {
+            method: "POST",
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        if (!response.ok) {
             Alert.alert(
                 'Authentication failed!',
                 'Could not log you in. Please check your credentials or try again later!'
             );
             setIsAuthenticating(false);
+        } else {
+            const data = await response.json();
+            authCtx.authenticate(data.token);
         }
     }
 
     if (isAuthenticating) {
-        return <LoadingOverlay message="Logging you in..." />;
+        return <LoadingOverlay message="Logging you in..."/>;
     }
 
     return (
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         height: "100%",
         justifyContent: "space-evenly",
-        paddingHorizontal:24,
+        paddingHorizontal: 24,
     },
     logoContainer: {
         marginTop: 36,
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
         width: 200,
         height: 80
     },
-    bottomContainer:{
-        marginBottom:36
+    bottomContainer: {
+        marginBottom: 36
     },
     bottomTextContainer: {
         marginVertical: 24,

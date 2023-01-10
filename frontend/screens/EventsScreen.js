@@ -12,23 +12,23 @@ function EventsScreen() {
 
     const fetchEvents = useCallback(async () => {
         setIsLoading(true);
-        try {
-            const response = await fetch(`http://localhost:8080/events/city/${authCtx.city}`, {
-                headers: {
-                    "Authorization": `Bearer ${authCtx.token}`
-                },
-            })
-            const data = await response.json();
-            setEvents(data);
-            setIsLoading(false);
-        } catch (error) {
+        const response = await fetch(`http://localhost:8080/events/city/${authCtx.city}`, {
+            headers: {
+                "Authorization": `Bearer ${authCtx.token}`
+            },
+        })
+        if (!response.ok) {
             Alert.alert(
                 'Something went wrong!',
                 'Please try again later!'
             );
             setIsLoading(false);
+        } else {
+            const data = await response.json();
+            setEvents(data);
+            setIsLoading(false);
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         fetchEvents();
@@ -38,7 +38,7 @@ function EventsScreen() {
         return <LoadingOverlay/>;
     }
 
-    if(events.length === 0){
+    if (events.length === 0) {
         return <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>;
     }
 
