@@ -1,5 +1,6 @@
 package com.chs.meetvent.api_error;
 
+import com.chs.meetvent.domain.dto.JSONMessageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+    public ResponseEntity<JSONMessageResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Unable to upload. File is too large!");
+                .body(new JSONMessageResponse("Unable to upload. File is too large!"));
     }
 }
