@@ -40,9 +40,11 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    @Transactional
     public List<AppUser> getUserForEvents(String id) {
         Optional<Event> event = this.eventRepository.findById(Long.parseLong(id));
-        return event.get().getAttendees();
+        List<AppUser> attendees = event.get().getAttendees();
+        return attendees;
     }
 
     public List<Event> getEventsFromCity(String cityName) {

@@ -20,7 +20,7 @@ public class AppUser extends BaseEntity{
     @Lob
     @JsonIgnore
     private String description;
-    @ManyToMany(mappedBy = "attendees", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "attendees")
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
