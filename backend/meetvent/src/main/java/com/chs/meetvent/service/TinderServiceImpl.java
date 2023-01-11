@@ -24,7 +24,7 @@ public class TinderServiceImpl implements TinderService{
     public List<AppUser> findUsers(String userToken) {
         List<AppUser> yourNextUsers = new ArrayList<>();
         AppUser appUser = this.appUserService.getUserFromToken(userToken);
-        List<TinderMatch> likeMatches = this.tinderMatchRepository.findAllByAppUser2_IdAndUser2Response(appUser.getId(), null);
+        List<TinderMatch> likeMatches = this.tinderMatchRepository.findAllByAppUser2_IdAndUser1ResponseAndUser2Response(appUser.getId(), "YES", null);
         List<Long> peopleIds = this.getPeopleWhoLikesYouIdsFromMatches(likeMatches);
         yourNextUsers.addAll(this.getPeopleWhoLikesYou(peopleIds));
         List<Long> notWantedProfilesIds = new ArrayList<>();
@@ -45,15 +45,20 @@ public class TinderServiceImpl implements TinderService{
                 this.tinderMatchRepository.save(tinderMatch.get());
                 return "MATCH";
             } else {
+                tinderMatch.get().setAppUser2(appUser);
+                tinderMatch.get().setUser2Response("NO");
+                this.tinderMatchRepository.save(tinderMatch.get());
                 return "FAILED";
             }
         } else {
             if(tinderResponse.equals("YES")) {
-                this.createNewContact(appUser, contactUser);
+                this.createNewContact(appUser, contactUser, "YES");
                 return "CONTACT";
+            } else {
+                this.createNewContact(appUser, contactUser, "NO");
+                return "FAILED";
             }
         }
-        return "ERROR";
     }
 
     private List<Long> getPeopleWhoLikesYouIdsFromMatches(List<TinderMatch> matches) {
@@ -75,20 +80,31 @@ public class TinderServiceImpl implements TinderService{
     }
 
     private List<Long> alreadyViewedProfilesIds(Long myId) {
-        List<TinderMatch> seenProfileMatches = new ArrayList<>();
         List<TinderMatch> seenProfileMatchesFirst = this.tinderMatchRepository.findAllByAppUser1_Id(myId);
+        List<TinderMatch> seenProfileMatchesSecondYes = this.tinderMatchRepository.findAllByAppUser2_IdAndUser2Response(myId, "YES");
+        List<TinderMatch> seenProfileMatchesSecondNO = this.tinderMatchRepository.findAllByAppUser2_IdAndUser2Response(myId, "NO");
+        List<TinderMatch> declineMyProfile = this.tinderMatchRepository.findAllByAppUser2_IdAndUser1Response(myId, "NO");
         List<Long> idsForSeenUsers = new ArrayList<>();
         for(TinderMatch match:seenProfileMatchesFirst) {
             idsForSeenUsers.add(match.getAppUser2().getId());
         }
+        for(TinderMatch match:seenProfileMatchesSecondYes) {
+            idsForSeenUsers.add(match.getAppUser1().getId());
+        }
+        for(TinderMatch match:seenProfileMatchesSecondNO) {
+            idsForSeenUsers.add(match.getAppUser1().getId());
+        }
+        for(TinderMatch match:declineMyProfile) {
+            idsForSeenUsers.add(match.getAppUser1().getId());
+        }
         return idsForSeenUsers;
     }
 
-    public TinderMatch createNewContact(AppUser appUser1, AppUser appUser2) {
+    public TinderMatch createNewContact(AppUser appUser1, AppUser appUser2, String tinderResponse) {
         TinderMatch tinderMatch = new TinderMatch();
         tinderMatch.setAppUser1(appUser1);
         tinderMatch.setAppUser2(appUser2);
-        tinderMatch.setUser1Response("YES");
+        tinderMatch.setUser1Response(tinderResponse);
         return this.tinderMatchRepository.save(tinderMatch);
     }
 }
