@@ -2,8 +2,7 @@ import {Alert, Image, StyleSheet, Text, View} from "react-native";
 import RegisterForm from "../components/Auth/RegisterForm";
 import colors from "../constants/colors";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
-import {useContext, useState} from "react";
-import {AuthContext} from "../store/auth-context";
+import { useState} from "react";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function RegisterScreen({navigation}) {
@@ -12,8 +11,6 @@ function RegisterScreen({navigation}) {
     }
 
     const [isAuthenticating, setIsAuthenticating] = useState(false);
-
-    const authCtx = useContext(AuthContext);
 
     async function signupHandler({username, email, password}) {
         setIsAuthenticating(true);
@@ -35,8 +32,8 @@ function RegisterScreen({navigation}) {
             );
             setIsAuthenticating(false);
         } else {
-            const data = await response.json();
-            authCtx.authenticate(data.token);
+            await response.json();
+            navigation.replace('Login')
         }
     }
 
