@@ -2,11 +2,12 @@ import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import Interests from "../components/Profile/Interests";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {AuthContext} from "../store/auth-context";
+import * as ImagePicker from 'expo-image-picker';
 
 const DUMMY_PROFILE = {
-    image: "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px",
+    image: "https://media.istockphoto.com/id/1208175274/vector/avatar-vector-icon-simple-element-illustrationavatar-vector-icon-material-concept-vector.jpg?s=612x612&w=0&k=20&c=t4aK_TKnYaGQcPAC5Zyh46qqAtuoPcb-mjtQax3_9Xc=",
     name: "Marco Reus",
     about: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.",
     interests: ["Movies", "Football", "Art", "Concert", "Music", "Online Games"]
@@ -17,15 +18,30 @@ function ProfileScreen() {
 
     const authCtx = useContext(AuthContext);
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [3, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setSelectedImage(result.assets[0].uri);
+        }
+    };
+
     return (
         <ScrollView>
             <View style={styles.detailsContainer}>
                 <View style={styles.imageContainer}>
                     <Image style={styles.image}
-                           source={{uri: image}}/>
+                           source={{uri: selectedImage !== null ? selectedImage : image}}/>
                 </View>
                 <Text style={styles.name}>{name}</Text>
-                <ButtonOutlined icon="create-outline">Edit Profile</ButtonOutlined>
+                <ButtonOutlined icon="image-outline" onPress={pickImage}>Change Photo</ButtonOutlined>
             </View>
             <View style={styles.aboutContainer}>
                 <View style={styles.aboutHeaderContainer}>
@@ -36,7 +52,7 @@ function ProfileScreen() {
             <Interests list={interests}/>
             <View style={styles.buttons}>
                 <ButtonOutlined color={colors.error500} icon="log-out-outline" iconSize={22}
-                                      iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonOutlined>
+                                iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonOutlined>
             </View>
         </ScrollView>
     )
