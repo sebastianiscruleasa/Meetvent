@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class AppUser extends BaseEntity{
     @JsonView(Views.Internal.class)
     @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER)
     private List<UserInterestCounter> userInterestCounters = new ArrayList<>();
+    @JsonView(Views.Internal.class)
+    private URI imageUri;
     public String getEmail() {
         return this.email;
     }
@@ -89,5 +92,13 @@ public class AppUser extends BaseEntity{
 
     public void setUserInterestCounters(List<UserInterestCounter> userInterestCounters) {
         this.userInterestCounters = userInterestCounters;
+    }
+
+    public URI getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(URI imageUri) {
+        this.imageUri = imageUri;
     }
 }

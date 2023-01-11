@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -61,9 +63,8 @@ public class AppUserServiceImpl implements AppUserService{
     }
 
     @Override
-    public byte[] getProfileImage(String token) {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        AppUser appUser = this.getUserFromToken(token);
+    public byte[] getProfileImage(String id) {
+        AppUser appUser = this.getAppUserById(id);
         byte[] image = ImageUtils.decompressImage(appUser.getImage());
         return image;
     }

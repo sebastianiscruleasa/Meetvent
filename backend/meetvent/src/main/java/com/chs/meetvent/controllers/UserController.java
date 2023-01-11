@@ -14,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,7 +35,8 @@ public class UserController {
     @GetMapping()
     @JsonView(Views.Internal.class)
     public AppUser getUser(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        return this.appUserService.getUserFromToken(token);
+        AppUser appUser = this.appUserService.getUserFromToken(token);
+        return appUser;
     }
 
     @GetMapping("/events")
@@ -41,15 +45,21 @@ public class UserController {
         return this.appUserService.getUserEventsFromToken(token);
     }
 
-    @PutMapping(path="/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(path="/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<AppUser> updateProfile(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image) throws IOException {
         AppUser user = this.appUserService.updateUserProfile(token, image);
-        return new ResponseEntity<>(this.appUserRepository.save(user), HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+        user = this.appUserRepository.save(user);
+        if(user.getImage() != null) {
+            user.setImageUri(location);
+            this.appUserRepository.save(user);
+        }
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping("/image")
-    public ResponseEntity<?> getImage(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        byte[] image = this.appUserService.getProfileImage(token);
+    @GetMapping("/image/{id}")
+    public ResponseEntity<?> getImage(@PathVariable String id) {
+        byte[] image = this.appUserService.getProfileImage(id);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
     }
 

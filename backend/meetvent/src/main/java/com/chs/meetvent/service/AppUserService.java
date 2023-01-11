@@ -14,7 +14,7 @@ public interface AppUserService {
     List<Event> getUserEventsFromToken(String token);
     AppUser getUserFromToken(String token);
     AppUser updateUserProfile(String token, MultipartFile image) throws IOException;
-    byte[] getProfileImage(String token);
+    byte[] getProfileImage(String id);
     List<AppUser> getAppUsersWithIdsInList(List<Long> ids);
     List<AppUser> getAppUsersWithIdsNotInList(List<Long> ids);
 }
