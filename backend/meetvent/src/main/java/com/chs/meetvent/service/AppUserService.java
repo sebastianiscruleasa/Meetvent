@@ -10,8 +10,11 @@ import java.util.Optional;
 
 public interface AppUserService {
     Optional<AppUser> getAppUserByEmail(String email);
+    AppUser getAppUserById(String id);
     List<Event> getUserEventsFromToken(String token);
     AppUser getUserFromToken(String token);
     AppUser updateUserProfile(String token, MultipartFile image, String description) throws IOException;
     byte[] getProfileImage(String token);
+    List<AppUser> getAppUsersWithIdsInList(List<Long> ids);
+    List<AppUser> getAppUsersWithIdsNotInList(List<Long> ids);
 }
