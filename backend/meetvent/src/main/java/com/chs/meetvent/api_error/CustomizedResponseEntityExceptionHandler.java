@@ -1,5 +1,6 @@
 package com.chs.meetvent.api_error;
 
+import com.chs.meetvent.api_error.exceptions.UserAlreadyJoinedEventException;
 import com.chs.meetvent.domain.dto.JSONMessageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public ResponseEntity<JSONMessageResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new JSONMessageResponse("Unable to upload. File is too large!"));
+    }
+
+    @ExceptionHandler(UserAlreadyJoinedEventException.class)
+    public final ResponseEntity<ErrorDetails> handleUserAlreadyJoinedEventException(Exception ex, WebRequest request) throws Exception {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
+                ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

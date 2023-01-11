@@ -1,7 +1,9 @@
 package com.chs.meetvent.service;
 
+import com.chs.meetvent.api_error.exceptions.UserAlreadyJoinedEventException;
 import com.chs.meetvent.domain.AppUser;
 import com.chs.meetvent.domain.Event;
+import com.chs.meetvent.domain.UserInterestCounter;
 import com.chs.meetvent.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.Hibernate;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.IIOException;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -19,11 +22,14 @@ public class EventServiceImpl implements EventService{
 
     private EventRepository eventRepository;
     private AppUserService appUserService;
+    private UserInterestCounterService userInterestCounterService;
 
     public EventServiceImpl(EventRepository eventRepository,
-                            AppUserService appUserService) {
+                            AppUserService appUserService,
+                            UserInterestCounterService userInterestCounterService) {
         this.eventRepository = eventRepository;
         this.appUserService = appUserService;
+        this.userInterestCounterService = userInterestCounterService;
     }
 
     @Override
@@ -77,5 +83,25 @@ public class EventServiceImpl implements EventService{
         event.setOrganizer(this.appUserService.getUserFromToken(token));
         Event savedEvent  = this.saveEvent(event);
         return savedEvent;
+    }
+
+    @Override
+    @Transactional
+    public UserInterestCounter joinEvent(String userToken, String eventId) {
+        AppUser appUser = this.appUserService.getUserFromToken(userToken);
+        Event event = this.getEventById(eventId);
+        UserInterestCounter userInterestCounter;
+        if(appUser.getEvents().contains(event)) {
+            throw new UserAlreadyJoinedEventException("User already joined this event");
+        } else {
+            appUser.saveEvent(event);
+            this.eventRepository.save(event);
+            try {
+                userInterestCounter = this.userInterestCounterService.updateUserInterestCounter(event.getInterestKey(), appUser);
+            } catch (NoSuchElementException e) {
+                userInterestCounter = this.userInterestCounterService.saveNewElement(event.getInterestKey(), appUser);
+            }
+        }
+        return userInterestCounter;
     }
 }

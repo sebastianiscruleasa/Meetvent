@@ -1,7 +1,10 @@
 package com.chs.meetvent.domain;
+import com.chs.meetvent.domain.views.Views;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,9 @@ import java.util.List;
 @Entity
 @Table(name="users")
 public class AppUser extends BaseEntity{
+    @JsonView(Views.Public.class)
     private String email;
+    @JsonView(Views.Public.class)
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -22,6 +27,7 @@ public class AppUser extends BaseEntity{
     @ManyToMany(mappedBy = "attendees")
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
+    @JsonView(Views.Internal.class)
     @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER)
     private List<UserInterestCounter> userInterestCounters = new ArrayList<>();
     public String getEmail() {

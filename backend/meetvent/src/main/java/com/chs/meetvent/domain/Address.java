@@ -1,10 +1,14 @@
 package com.chs.meetvent.domain;
 
+import com.chs.meetvent.domain.views.Views;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Address {
+    @JsonView(Views.Public.class)
     private String city;
+    @JsonView(Views.Public.class)
     private String street;
 
     public String getCity() {

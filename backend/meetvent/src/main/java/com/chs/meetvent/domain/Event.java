@@ -1,5 +1,7 @@
 package com.chs.meetvent.domain;
+import com.chs.meetvent.domain.views.Views;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -9,7 +11,9 @@ import java.util.List;
 @Entity
 @Table(name="events")
 public class Event extends BaseEntity{
+    @JsonView(Views.Public.class)
     private String title;
+    @JsonView(Views.Public.class)
     @ManyToOne
     @JoinColumn(name="organizer_id")
     private AppUser organizer;
@@ -19,9 +23,13 @@ public class Event extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<AppUser> attendees = new ArrayList<>();
+    @JsonView(Views.Public.class)
     private LocalDate date;
+    @JsonView(Views.Public.class)
     private String time;
+    @JsonView(Views.Public.class)
     private String location;
+    @JsonView(Views.Public.class)
     @Embedded
     private Address address;
     @JsonIgnore
@@ -29,6 +37,7 @@ public class Event extends BaseEntity{
     @Column(name="image", length = 1000)
     private byte[] image;
 
+    @JsonView(Views.Public.class)
     @Column(nullable = false)
     private int interestKey;
 

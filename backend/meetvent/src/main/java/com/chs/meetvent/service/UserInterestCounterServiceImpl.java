@@ -18,7 +18,7 @@ public class UserInterestCounterServiceImpl implements UserInterestCounterServic
     public UserInterestCounter updateUserInterestCounter(int id, AppUser appUser) {
         UserInterestCounter userInterestCounter = this.userInterestCounterRepository.findUserInterestCounterByInterestKeyAndAppUser(id, appUser).get();
         userInterestCounter.setCounterEvents(userInterestCounter.getCounterEvents() + 1);
-        return userInterestCounter;
+        return this.userInterestCounterRepository.save(userInterestCounter);
     }
 
     @Override

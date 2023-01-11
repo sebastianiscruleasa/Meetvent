@@ -1,6 +1,8 @@
 package com.chs.meetvent.domain;
 
+import com.chs.meetvent.domain.views.Views;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -10,7 +12,9 @@ public class UserInterestCounter extends BaseEntity{
     @JsonIgnore
     @ManyToOne
     private AppUser appUser;
+    @JsonView(Views.Public.class)
     private int interestKey;
+    @JsonView(Views.Public.class)
     private int counterEvents;
 
     public AppUser getAppUser() {
