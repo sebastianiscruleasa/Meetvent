@@ -46,7 +46,7 @@ function HomeStackNavigator() {
     )
 }
 
-function EventsStackNavigator() {
+function EventsStackNavigator({route}) {
     const [filtersDropdownActive, setFilterDropdownActive] = useState(false);
 
     return (
@@ -63,7 +63,7 @@ function EventsStackNavigator() {
             }}>
                 {
                     () => {
-                        return (<EventsScreen filtersDropdown={filtersDropdownActive}/>)
+                        return (<EventsScreen eventsRoute={route} filtersDropdown={filtersDropdownActive}/>)
                     }
                 }
             </Stack.Screen>

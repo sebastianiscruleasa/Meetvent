@@ -19,12 +19,15 @@ export default FiltersDropdown;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.primary100,
+        backgroundColor: "white",
         borderRadius: 20,
-        padding: 8,
-        margin: 8,
+        borderColor: colors.primary100,
+        borderWidth: 5,
+        marginHorizontal: 16,
         position:"absolute",
-        width: "100%",
-        zIndex: 2
+        zIndex: 2,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent:"space-evenly"
     }
 })

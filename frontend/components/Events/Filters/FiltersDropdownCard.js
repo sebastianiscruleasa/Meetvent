@@ -21,6 +21,7 @@ export default FiltersDropdownCard;
 
 const styles = StyleSheet.create({
     container: {
-        height: 45
+        height: 45,
+        width: 150
     }
 })

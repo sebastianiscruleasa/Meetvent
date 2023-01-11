@@ -5,7 +5,7 @@ import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {useCallback, useContext, useEffect, useState} from "react";
 import FiltersDropdown from "../components/Events/Filters/FiltersDropdown";
 
-function EventsScreen({filtersDropdown}) {
+function EventsScreen({eventsRoute, filtersDropdown}) {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     const [activeFilters, setActiveFilters] = useState([]);
@@ -35,6 +35,12 @@ function EventsScreen({filtersDropdown}) {
     useEffect(() => {
         fetchEvents();
     }, [fetchEvents])
+
+    useEffect(() => {
+        if (eventsRoute.params) {
+            setActiveFilters([eventsRoute.params.interestId])
+        }
+    }, [eventsRoute])
 
     if (isLoading) {
         return <LoadingOverlay/>;
