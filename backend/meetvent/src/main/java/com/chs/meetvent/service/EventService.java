@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventService {
-    List<Event> getAllEvents();
+    List<Event> getAllEvents(String token);
     Event getEventById(String id);
     Event saveEvent(Event event);
     void deleteEventById(Long id);
@@ -19,4 +19,5 @@ public interface EventService {
     void updateEventImage(String id, MultipartFile image) throws IOException;
     Event createEvent(Event event, String token);
     UserInterestCounter joinEvent(String userToken, String eventId);
+    Event getEventByIdAndToken(String id, String userToken);
 }

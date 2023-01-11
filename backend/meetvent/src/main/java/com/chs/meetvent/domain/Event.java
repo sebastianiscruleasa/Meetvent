@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
+import javax.swing.text.View;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,10 @@ public class Event extends BaseEntity{
     @JsonView(Views.Public.class)
     @Column(nullable = false)
     private int interestKey;
+
+    @JsonView(Views.Going.class)
+    @Column(nullable = false)
+    private boolean going;
 
     public Address getAddress() {
         return address;
@@ -111,5 +116,13 @@ public class Event extends BaseEntity{
 
     public void setInterestKey(int interestKey) {
         this.interestKey = interestKey;
+    }
+
+    public boolean getGoing() {
+        return going;
+    }
+
+    public void setGoing(boolean going) {
+        this.going = going;
     }
 }

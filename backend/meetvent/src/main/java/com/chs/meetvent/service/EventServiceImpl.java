@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,7 +34,17 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<Event> getAllEvents() {
+    @Transactional
+    public List<Event> getAllEvents(String token) {
+        AppUser appUser = this.appUserService.getUserFromToken(token);
+        for(Event e:this.eventRepository.findAll()) {
+            if(appUser.getEvents().contains(e)) {
+                e.setGoing(true);
+            } else {
+                e.setGoing(false);
+            }
+            this.eventRepository.save(e);
+        }
         return this.eventRepository.findAll();
     }
 
@@ -103,5 +114,18 @@ public class EventServiceImpl implements EventService{
             }
         }
         return userInterestCounter;
+    }
+
+    @Override
+    public Event getEventByIdAndToken(String id, String userToken) {
+        List<Event> events = this.appUserService.getUserEventsFromToken(userToken);
+        Event event = this.getEventById(id);
+        if(events.contains(event)) {
+            event.setGoing(true);
+        } else {
+            event.setGoing(false);
+        }
+        this.eventRepository.save(event);
+        return event;
     }
 }

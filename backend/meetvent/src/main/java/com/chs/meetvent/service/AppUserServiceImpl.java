@@ -38,6 +38,7 @@ public class AppUserServiceImpl implements AppUserService{
     }
 
     @Override
+    @Transactional
     public List<Event> getUserEventsFromToken(String token) {
         AppUser appUser = this.getUserFromToken(token);
         List<Event> events = appUser.getEvents();
@@ -66,5 +67,20 @@ public class AppUserServiceImpl implements AppUserService{
         AppUser appUser = this.getUserFromToken(token);
         byte[] image = ImageUtils.decompressImage(appUser.getImage());
         return image;
+    }
+
+    @Override
+    public List<AppUser> getAppUsersWithIdsInList(List<Long> ids) {
+        return this.appUserRepository.findAllByIdIn(ids);
+    }
+
+    @Override
+    public List<AppUser> getAppUsersWithIdsNotInList(List<Long> ids) {
+        return this.appUserRepository.findAllByIdNotIn(ids);
+    }
+
+    @Override
+    public AppUser getAppUserById(String id) {
+        return this.appUserRepository.getAppUserById(Long.parseLong(id)).get();
     }
 }

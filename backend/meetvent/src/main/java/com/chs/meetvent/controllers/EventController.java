@@ -34,15 +34,15 @@ public class EventController {
     }
 
     @GetMapping()
-    @JsonView(Views.Public.class)
-    public List<Event> getAllEvents() {
-        return this.eventService.getAllEvents();
+    @JsonView(Views.Going.class)
+    public List<Event> getAllEvents(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+        return this.eventService.getAllEvents(token);
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.Public.class)
-    public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        return new ResponseEntity<>(this.eventService.getEventById(id), HttpStatus.OK);
+    @JsonView(Views.Going.class)
+    public ResponseEntity<Event> getEventById(@PathVariable String id, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+        return new ResponseEntity<>(this.eventService.getEventByIdAndToken(id, token), HttpStatus.OK);
     }
 
     @PostMapping()
