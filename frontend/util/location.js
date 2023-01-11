@@ -1,4 +1,4 @@
-const API_KEY = '105834088396174e15725187x127025';
+const API_KEY = '147496517330474213429x4620';
 
 export async function getAddress(lat, lng) {
     const url = `https://geocode.xyz/${lat},${lng}?json=1&auth=${API_KEY}`;

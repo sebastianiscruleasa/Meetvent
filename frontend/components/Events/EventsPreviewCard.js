@@ -13,6 +13,14 @@ function EventsPreviewCard({id, image, date, title, location}) {
         })
     }
 
+    const options = {
+        month: "long",
+    };
+
+    let newFormatDate = new Date(date);
+    const day = newFormatDate.getDay();
+    const month = newFormatDate.toLocaleDateString("en-US", options)
+
     return (
         <Pressable onPress={pressHandler} style={({pressed}) =>
             pressed
@@ -22,8 +30,8 @@ function EventsPreviewCard({id, image, date, title, location}) {
             <View style={styles.imageContainer}>
                 <View style={styles.onImage}>
                     <View style={styles.date}>
-                        <Text style={styles.dateText}>{date}</Text>
-                        <Text style={styles.dateText}>JUNE</Text>
+                        <Text style={styles.dateText}>{day}</Text>
+                        <Text style={styles.dateText}>{month}</Text>
                     </View>
                     <Pressable style={styles.favoriteContainer}>
                         <Ionicons name="bookmark" color="red" size={16} style={styles.favorite}/>
