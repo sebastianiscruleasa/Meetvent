@@ -32,9 +32,6 @@ public class TinderController {
 
     @PostMapping("/response/user/{id}")
     public ResponseEntity<?> yourResponseForUser(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id, @RequestBody TinderResponseDTO tinderResponse) {
-        if(tinderResponse.equals("NO")) {
-            return new ResponseEntity<>(new JSONMessageResponse("NO"), HttpStatus.OK);
-        }
         String statusAfterTinderLogic = this.tinderService.doTinderMatchLogic(token, id, tinderResponse.getResponse());
         return new ResponseEntity<>(new JSONMessageResponse(statusAfterTinderLogic), HttpStatus.OK);
     }
