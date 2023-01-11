@@ -23,6 +23,12 @@ function SearchHome({searchedText, searchHandler, data}) {
 
     }
 
+    function onPressFilterHandler(id) {
+        navigation.navigate("EventsStack", {
+            interestId: id
+        })
+    }
+
     return (
         <View style={styles.absoluteContainer}>
             <View style={styles.container}/>
@@ -52,7 +58,7 @@ function SearchHome({searchedText, searchHandler, data}) {
             {!searchedText &&
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={styles.filtersContainer}>
                     {interests
-                        .map((interest) => <ButtonContained key={interest.key}
+                        .map((interest) => <ButtonContained key={interest.key} onPress={() => onPressFilterHandler(interest.key)}
                                                             color={interest.color}
                                                             icon={interest.icon}>{interest.name}</ButtonContained>)}
                 </ScrollView>}

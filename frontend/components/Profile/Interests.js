@@ -1,5 +1,4 @@
 import {StyleSheet, Text, View} from "react-native";
-import ButtonOutlined from "../ui/ButtonOutlined";
 import ButtonContained from "../ui/ButtonContained";
 
 import interests from "../../constants/interests";
@@ -9,7 +8,6 @@ function Interests({list}) {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Interests</Text>
-                <ButtonOutlined icon="grid-outline">Change</ButtonOutlined>
             </View>
             <View style={styles.interestsContainer}>
                 {interests
@@ -29,10 +27,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
     },
     headerContainer: {
-        marginBottom: 12,
+        marginBottom: 24,
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "center"
     },
     headerText: {
         fontWeight: "bold",
