@@ -1,10 +1,11 @@
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import Interests from "../components/Profile/Interests";
 import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
-import {useContext, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../store/auth-context";
 import * as ImagePicker from 'expo-image-picker';
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 const DUMMY_PROFILE = {
     image: "https://media.istockphoto.com/id/1208175274/vector/avatar-vector-icon-simple-element-illustrationavatar-vector-icon-material-concept-vector.jpg?s=612x612&w=0&k=20&c=t4aK_TKnYaGQcPAC5Zyh46qqAtuoPcb-mjtQax3_9Xc=",
@@ -14,11 +15,41 @@ const DUMMY_PROFILE = {
 }
 
 function ProfileScreen() {
-    const {image, name, about, interests} = DUMMY_PROFILE;
+    const {image, about, interests} = DUMMY_PROFILE;
 
     const authCtx = useContext(AuthContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
+    const [user, setUser] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchUser = useCallback(async () => {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:8080/users`, {
+            headers: {
+                "Authorization": `Bearer ${authCtx.token}`
+            },
+        })
+        if (!response.ok) {
+            Alert.alert(
+                'Something went wrong!',
+                'Please try again later!'
+            );
+            setIsLoading(false);
+        } else {
+            const data = await response.json();
+            setUser(data);
+            setIsLoading(false);
+        }
+    }, [authCtx])
+
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser])
+
+    if (isLoading) {
+        return <LoadingOverlay/>;
+    }
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,10 +68,12 @@ function ProfileScreen() {
         <ScrollView>
             <View style={styles.detailsContainer}>
                 <View style={styles.imageContainer}>
-                    <Image style={styles.image}
-                           source={{uri: selectedImage !== null ? selectedImage : image}}/>
+
+                        <Image style={styles.image}
+                               source={{uri: selectedImage !== null ? selectedImage : (user.imageUri ? user.imageUri : image)}}/>
+
                 </View>
-                <Text style={styles.name}>{name}</Text>
+                <Text style={styles.name}>{user.username}</Text>
                 <ButtonOutlined icon="image-outline" onPress={pickImage}>Change Photo</ButtonOutlined>
             </View>
             <View style={styles.aboutContainer}>
