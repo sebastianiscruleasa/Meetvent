@@ -33,6 +33,8 @@ public class AppUser extends BaseEntity{
     private List<UserInterestCounter> userInterestCounters = new ArrayList<>();
     @JsonView(Views.Internal.class)
     private URI imageUri;
+    @JsonView(Views.Internal.class)
+    private String token;
     public String getEmail() {
         return this.email;
     }
@@ -100,5 +102,13 @@ public class AppUser extends BaseEntity{
 
     public void setImageUri(URI imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
