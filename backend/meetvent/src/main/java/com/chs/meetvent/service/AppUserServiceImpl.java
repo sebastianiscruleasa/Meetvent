@@ -54,10 +54,9 @@ public class AppUserServiceImpl implements AppUserService{
     }
 
     @Override
-    public AppUser updateUserProfile(String token, MultipartFile image, String description) throws IOException{
+    public AppUser updateUserProfile(String token, MultipartFile image) throws IOException{
         AppUser appUser = this.getUserFromToken(token);
         appUser.setImage(ImageUtils.compressImage(image.getBytes()));
-        appUser.setDescription(description);
         return this.appUserRepository.save(appUser);
     }
 

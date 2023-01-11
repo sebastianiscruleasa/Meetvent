@@ -13,7 +13,7 @@ public interface AppUserService {
     AppUser getAppUserById(String id);
     List<Event> getUserEventsFromToken(String token);
     AppUser getUserFromToken(String token);
-    AppUser updateUserProfile(String token, MultipartFile image, String description) throws IOException;
+    AppUser updateUserProfile(String token, MultipartFile image) throws IOException;
     byte[] getProfileImage(String token);
     List<AppUser> getAppUsersWithIdsInList(List<Long> ids);
     List<AppUser> getAppUsersWithIdsNotInList(List<Long> ids);

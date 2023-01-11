@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @PutMapping(path="/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<AppUser> updateProfile(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image, @RequestPart String description) throws IOException {
-        AppUser user = this.appUserService.updateUserProfile(token, image, description);
+    public ResponseEntity<AppUser> updateProfile(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image) throws IOException {
+        AppUser user = this.appUserService.updateUserProfile(token, image);
         return new ResponseEntity<>(this.appUserRepository.save(user), HttpStatus.CREATED);
     }
 
