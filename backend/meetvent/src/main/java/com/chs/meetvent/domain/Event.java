@@ -29,6 +29,9 @@ public class Event extends BaseEntity{
     @Column(name="image", length = 1000)
     private byte[] image;
 
+    @Column(nullable = false)
+    private int interestKey;
+
     public Address getAddress() {
         return address;
     }
@@ -91,5 +94,13 @@ public class Event extends BaseEntity{
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public int getInterestKey() {
+        return interestKey;
+    }
+
+    public void setInterestKey(int interestKey) {
+        this.interestKey = interestKey;
     }
 }

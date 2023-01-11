@@ -4,81 +4,71 @@ import com.chs.meetvent.domain.AppUser;
 import com.chs.meetvent.domain.Event;
 import com.chs.meetvent.jwt.JwtUtils;
 import com.chs.meetvent.repository.AppUserRepository;
-import com.chs.meetvent.repository.EventRepository;
-import com.chs.meetvent.service.AppUserService;
-import com.chs.meetvent.service.EventService;
-import com.chs.meetvent.service.ImageUtils;
+import com.chs.meetvent.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    AppUserService appUserService;
-    AppUserRepository appUserRepository;
-    EventService eventService;
-    EventRepository eventRepository;
-    JwtUtils jwtUtils;
+    private AppUserService appUserService;
+    private AppUserRepository appUserRepository;
+    private EventService eventService;
+    private JwtUtils jwtUtils;
+    private UserInterestCounterService userInterestCounterService;
 
     public UserController(AppUserService appUserService,
                           AppUserRepository appUserRepository,
                           JwtUtils jwtUtils,
                           EventService eventService,
-                          EventRepository eventRepository) {
+                          UserInterestCounterService userInterestCounterService) {
         this.appUserService = appUserService;
         this.jwtUtils = jwtUtils;
         this.eventService = eventService;
-        this.eventRepository = eventRepository;
+        this.userInterestCounterService = userInterestCounterService;
         this.appUserRepository = appUserRepository;
     }
 
     @GetMapping()
     public AppUser getUser(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
-        return appUser.get();
+        return this.appUserService.getUserFromToken(token);
     }
 
     @GetMapping("/events")
     public List<Event> getUserEvents(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        return this.appUserService.getUserEvents(email);
+        return this.appUserService.getUserEventsFromToken(token);
     }
 
-    @PostMapping("/events/{id}") //join an Event as a User
-    public void joinEvent(@PathVariable String id, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
-        Optional<Event> event = this.eventService.getEventById(id);
-        appUser.get().saveEvent(event.get());
-        this.appUserRepository.save(appUser.get());
+    @PostMapping("/events/{eventId}") //join an Event as a User
+    public void joinEvent(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String eventId) {
+        AppUser appUser = this.appUserService.getUserFromToken(token);
+        Event event = this.eventService.getEventById(eventId);
+        try {
+            this.userInterestCounterService.updateUserInterestCounter(event.getInterestKey(), appUser);
+        } catch (NoSuchElementException e) {
+            this.userInterestCounterService.saveNewElement(event.getInterestKey(), appUser);
+        }
+        appUser.saveEvent(event);
+        this.appUserRepository.save(appUser);
     }
 
     @PutMapping(path="/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<AppUser> updateProfile(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image, @RequestPart String description) throws IOException {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
-        System.out.println(image);
-        AppUser user = appUser.get();
-        user.setImage(ImageUtils.compressImage(image.getBytes()));
-        user.setDescription(description);
-        this.appUserRepository.save(user);
+        AppUser user = this.appUserService.updateUserProfile(token, image, description);
         return new ResponseEntity<>(this.appUserRepository.save(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/image")
     public ResponseEntity<?> getImage(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(7));
-        Optional<AppUser> appUser = this.appUserService.getAppUserByEmail(email);
-        byte[] image = ImageUtils.decompressImage(appUser.get().getImage());
+        byte[] image = this.appUserService.getProfileImage(token);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
     }
 

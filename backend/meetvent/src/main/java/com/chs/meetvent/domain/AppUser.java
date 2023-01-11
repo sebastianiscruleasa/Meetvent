@@ -22,7 +22,8 @@ public class AppUser extends BaseEntity{
     @ManyToMany(mappedBy = "attendees")
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
-
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER)
+    private List<UserInterestCounter> userInterestCounters = new ArrayList<>();
     public String getEmail() {
         return this.email;
     }
@@ -74,5 +75,13 @@ public class AppUser extends BaseEntity{
     public void saveEvent(Event event) {
         event.getAttendees().add(this);
         this.getEvents().add(event);
+    }
+
+    public List<UserInterestCounter> getUserInterestCounters() {
+        return userInterestCounters;
+    }
+
+    public void setUserInterestCounters(List<UserInterestCounter> userInterestCounters) {
+        this.userInterestCounters = userInterestCounters;
     }
 }
