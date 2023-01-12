@@ -93,8 +93,8 @@ public class EventController {
 
     @PostMapping("/{id}/join") //join an Event as a User
     @JsonView(Views.Public.class)
-    public ResponseEntity<UserInterestCounter> joinEvent(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id) {
-        UserInterestCounter userInterestCounter = this.eventService.joinEvent(token, id);
-        return new ResponseEntity<>(userInterestCounter, HttpStatus.OK);
+    public List<UserInterestCounter> joinEvent(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id) {
+        List<UserInterestCounter> userInterests = this.eventService.joinEvent(token, id);
+        return userInterests;
     }
 }

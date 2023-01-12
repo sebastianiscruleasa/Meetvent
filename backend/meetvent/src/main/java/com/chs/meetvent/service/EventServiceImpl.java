@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public UserInterestCounter joinEvent(String userToken, String eventId) {
+    public List<UserInterestCounter> joinEvent(String userToken, String eventId) {
         AppUser appUser = this.appUserService.getUserFromToken(userToken);
         Event event = this.getEventById(eventId);
         UserInterestCounter userInterestCounter;
@@ -114,7 +114,8 @@ public class EventServiceImpl implements EventService{
                 userInterestCounter = this.userInterestCounterService.saveNewElement(event.getInterestKey(), appUser);
             }
         }
-        return userInterestCounter;
+        List<UserInterestCounter> userInterests = this.userInterestCounterService.getAllInterestsForUser(appUser);
+        return userInterests;
     }
 
     @Override

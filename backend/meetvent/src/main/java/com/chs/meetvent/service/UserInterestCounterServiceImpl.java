@@ -6,6 +6,8 @@ import com.chs.meetvent.repository.UserInterestCounterRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserInterestCounterServiceImpl implements UserInterestCounterService{
     private UserInterestCounterRepository userInterestCounterRepository;
@@ -28,5 +30,10 @@ public class UserInterestCounterServiceImpl implements UserInterestCounterServic
         userInterestCounter.setAppUser(appUser);
         userInterestCounter.setCounterEvents(1);
         return this.userInterestCounterRepository.save(userInterestCounter);
+    }
+
+    @Override
+    public List<UserInterestCounter> getAllInterestsForUser(AppUser appUser) {
+        return this.userInterestCounterRepository.findAllByAppUser(appUser);
     }
 }
