@@ -5,8 +5,6 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 
-const img = "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px";
-
 function ConnectScreen() {
     const [isLoading, setIsLoading] = useState(false);
     const [characters, setCharacters] = useState([])
@@ -76,7 +74,7 @@ function ConnectScreen() {
                                 onSwipe={async (dir) => await swipeRequest(character.id, dir)}
                                 onCardLeftScreen={() => outOfFrame(character.username)}>
                         <View style={styles.card}>
-                            <ImageBackground style={styles.cardImage} source={{uri: img}}>
+                            <ImageBackground style={styles.cardImage} source={{uri: character.imageUri}}>
                                 <LinearGradient start={{x: 1, y: 0}} end={{x: 0.3, y: 0}}
                                                 colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']} style={styles.cardTitle}>
                                     <Text style={styles.title}>{character.username}</Text>

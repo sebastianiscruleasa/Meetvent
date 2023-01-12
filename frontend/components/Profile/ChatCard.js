@@ -1,9 +1,7 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
 import colors from "../../constants/colors";
 
-const img = "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px";
-
-function ChatCard({email, username}) {
+function ChatCard({email, username, image}) {
     return (
         <Pressable style={({pressed}) =>
             pressed
@@ -11,7 +9,7 @@ function ChatCard({email, username}) {
                 : [styles.container]
         }>
             <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: img}}/>
+                <Image style={styles.image} source={{uri: image}}/>
             </View>
             <View style={styles.detailsContainer}>
                 <Text style={styles.title}>{username}</Text>

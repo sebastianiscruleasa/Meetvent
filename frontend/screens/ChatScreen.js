@@ -43,7 +43,7 @@ function ChatScreen() {
         <View style={styles.container}>
             {connections.length !== 0 &&
                 <FlatList data={connections} keyExtractor={(connection) => connection.id} renderItem={(itemData) =>
-                    <ChatCard email={itemData.item.email} username={itemData.item.username} />
+                    <ChatCard email={itemData.item.email} username={itemData.item.username} image={itemData.item.imageUri}/>
                 }/>}
             {connections.length === 0 &&
                 <View style={styles.emptyContainer}>
