@@ -1,22 +1,21 @@
-import React, {useState, useMemo, useCallback, useEffect, useContext} from 'react'
+import React, {useState, useCallback, useEffect, useContext} from 'react'
 import {Alert, ImageBackground, Text, View} from 'react-native'
 import TinderCard from 'react-tinder-card'
-import ButtonContained from "../components/ui/ButtonContained";
 import {LinearGradient} from 'expo-linear-gradient';
 import {AuthContext} from "../store/auth-context";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 const img = "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px";
 
 function ConnectScreen() {
+    const [isLoading, setIsLoading] = useState(false);
     const [characters, setCharacters] = useState([])
     let charactersState = characters;
-    console.log(characters)
-
-    const childRefs = useMemo(() => Array(characters.length).fill(0).map(() => React.createRef()), [characters])
 
     const authCtx = useContext(AuthContext);
 
     const fetchUsers = useCallback(async () => {
+        setIsLoading(true);
         const response = await fetch(`http://localhost:8080/tinder/users`, {
             headers: {
                 "Authorization": `Bearer ${authCtx.token}`
@@ -27,10 +26,11 @@ function ConnectScreen() {
                 'Something went wrong!',
                 'Please try again later!'
             );
+            setIsLoading(false);
         } else {
             const data = await response.json();
-            console.log(data)
             setCharacters(data);
+            setIsLoading(false);
         }
     }, [])
 
@@ -40,7 +40,6 @@ function ConnectScreen() {
 
     async function swipeRequest(id, direction) {
         const dir = direction === "right" ? "YES" : "NO";
-        console.log(dir)
         const response = await fetch(`http://localhost:8080/tinder/response/user/${id}`, {
             method: "POST",
             body: JSON.stringify({
@@ -61,26 +60,19 @@ function ConnectScreen() {
     }
 
     const outOfFrame = (name) => {
-        console.log(name + ' left the screen!')
         charactersState = charactersState.filter(character => character.name !== name)
         setCharacters(charactersState)
     }
 
-    const swipeButtonHandler = (dir) => {
-        const cardsLeft = characters.filter(person => !alreadyRemoved.includes(person.username))
-        if (cardsLeft.length) {
-            const toBeRemoved = cardsLeft[cardsLeft.length - 1].name // Find the card object to be removed
-            const index = characters.map(person => person.username).indexOf(toBeRemoved) // Find the index of which to make the reference to
-            alreadyRemoved.push(toBeRemoved) // Make sure the next card gets removed next time if this card do not have time to exit the screen
-            childRefs[index].current.swipe(dir) // Swipe the card!
-        }
+    if (isLoading) {
+        return <LoadingOverlay/>;
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.cardContainer}>
-                {characters.map((character, index) =>
-                    <TinderCard ref={childRefs[index]} key={index}
+                {characters.length !== 0 && characters.map((character, index) =>
+                    <TinderCard key={index}
                                 onSwipe={async (dir) => await swipeRequest(character.id, dir)}
                                 onCardLeftScreen={() => outOfFrame(character.username)}>
                         <View style={styles.card}>
@@ -93,12 +85,9 @@ function ConnectScreen() {
                         </View>
                     </TinderCard>
                 )}
-            </View>
-            <View style={styles.buttons}>
-                <ButtonContained icon="close" iconSize={24} color="red" justIcon={true}
-                                 onPress={() => swipeButtonHandler('left')}/>
-                <ButtonContained icon="heart" iconSize={24} color="green" justIcon={true}
-                                 onPress={() => swipeButtonHandler('right')}/>
+                {characters.length === 0 &&
+                    <Text style={styles.noConnections}>No connections to be made!</Text>
+                }
             </View>
         </View>
     )
@@ -109,7 +98,7 @@ export default ConnectScreen;
 const styles = {
     container: {
         flex: 1,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         width: '100%',
         paddingVertical: 40
     },
@@ -154,4 +143,9 @@ const styles = {
         justifyContent: "space-evenly",
         zIndex: -100,
     },
+    noConnections: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 24,
+    }
 }
