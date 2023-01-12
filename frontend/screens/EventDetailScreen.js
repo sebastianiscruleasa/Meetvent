@@ -32,7 +32,7 @@ function EventDetailScreen({route}) {
             const data = await response.json();
             const address = `${data.address.street}, ${data.address.city}`;
             const interest = interests.find(interest => interest.key === data.interestKey)
-            setEvent({...data, address: address, interest: interest});
+            setEvent({...data, address: address, interest: interest})
         }
         setIsLoading(false);
     }, [eventId])
@@ -70,10 +70,8 @@ function EventDetailScreen({route}) {
     }
 
     const image = "https://media.resources.festicket.com/www/photos/3694-artwork.jpg"
-    const organizer = {
-        name: "Jurj Mihai8",
-        photo: "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px"
-    }
+    const organizerPhoto= "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px"
+
 
     const options = {
         weekday: "long",
@@ -93,10 +91,8 @@ function EventDetailScreen({route}) {
             <ScrollView style={styles.container}>
                 <EventDetailRow title={updatedDate} details={event.time} icon="calendar"/>
                 <EventDetailRow title={event.location} details={event.address} icon="location"/>
-                <EventDetailRow title={organizer.name} details="Organizer" image={organizer.photo}/>
-                <EventDetailRow title={event.interest.name} details="Category" icon={event.interest.icon} color={event.interest.color} iconColor="white"/>
-                <Text style={styles.about}>About Event</Text>
-                <Text style={styles.description}>{event.description}</Text>
+                {event.organizer && <EventDetailRow title={event.organizer.username} details="Organizer" image={organizerPhoto}/>}
+                {event.interest && <EventDetailRow title={event.interest.name} details="Category" icon={event.interest.icon} color={event.interest.color} iconColor="white"/>}
             </ScrollView>
             <View style={styles.buttonContainer}>
                 {!event.going &&
