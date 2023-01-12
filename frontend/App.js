@@ -68,7 +68,8 @@ function EventsStackNavigator({route}) {
                     }
                 }
             </Stack.Screen>
-            <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen}/>
+            <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen} options={{
+                title: "Event details"}}/>
         </Stack.Navigator>
     )
 }
