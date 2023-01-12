@@ -30,6 +30,12 @@ public class TinderController {
         return this.tinderService.findUsers(token);
     }
 
+    @GetMapping("/matches")
+    @JsonView(Views.Public.class)
+    public List<AppUser> findMyMatches(@RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+        return this.tinderService.findMyMatches(token);
+    }
+
     @PostMapping("/response/user/{id}")
     public ResponseEntity<?> yourResponseForUser(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id, @RequestBody TinderResponseDTO tinderResponse) {
         String statusAfterTinderLogic = this.tinderService.doTinderMatchLogic(token, id, tinderResponse.getResponse());
