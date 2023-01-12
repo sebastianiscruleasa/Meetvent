@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import {Ionicons} from "@expo/vector-icons";
 import colors from "../../constants/colors";
 
-function EventsPreviewCard({id, image, date, title, location}) {
+function EventsPreviewCard({id, image, date, title, location, going}) {
     const navigation = useNavigation();
 
     function pressHandler() {
@@ -33,9 +33,11 @@ function EventsPreviewCard({id, image, date, title, location}) {
                         <Text style={styles.dateText}>{day}</Text>
                         <Text style={styles.dateText}>{month}</Text>
                     </View>
-                    <Pressable style={styles.favoriteContainer}>
-                        <Ionicons name="bookmark" color="red" size={16} style={styles.favorite}/>
-                    </Pressable>
+                    {going &&
+                        <Pressable style={styles.goingContainer}>
+                            <Ionicons name="checkmark-circle" color="#34b233" size={16} style={styles.favorite}/>
+                        </Pressable>
+                    }
                 </View>
                 <Image style={styles.image} source={{uri: image}}/>
             </View>
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 12,
     },
-    favoriteContainer:{
+    goingContainer:{
         alignItems: "center",
         justifyContent: "center",
         top: 8,

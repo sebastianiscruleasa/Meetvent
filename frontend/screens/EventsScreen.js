@@ -60,6 +60,9 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
         }
     }
 
+    // const filteredEvents = events.filter((event) => activeFilters.includes(event.interestKey));
+    // console.log(activeFilters)
+
     return (
         <View>
             {filtersDropdown && <FiltersDropdown activeFilters={activeFilters} onPressFilter={onPressFilter}/>}
