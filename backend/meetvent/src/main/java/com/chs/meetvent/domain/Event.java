@@ -47,6 +47,7 @@ public class Event extends BaseEntity{
     @Column(nullable = false)
     private boolean going;
 
+    @JsonView(Views.Public.class)
     private URI imageUri;
 
     public Address getAddress() {
