@@ -4,8 +4,7 @@ export const InterestsContext = createContext({
     interests: [],
     city: '',
     locateUser: (city) => {},
-    updateInterests: (id) => {
-    }
+    setUsersInterests: (userInterests) => {}
 })
 
 function InterestsContextProvider({children}) {
@@ -16,24 +15,15 @@ function InterestsContextProvider({children}) {
         setCity(city);
     }
 
-    function updateInterests(id) {
-        setInterests((prevState) => {
-            for (let key in prevState ){
-                if(key === id){
-                    prevState[key]++;
-                } else {
-                    prevState = [...prevState, {id:1}]
-                }
-            }
-            return prevState
-        })
+    function setUsersInterests(userInterests) {
+        setInterests(userInterests);
     }
 
     const value = {
         interests: interests,
         city: city,
         locateUser: locateUser,
-        updateInterests: updateInterests
+        setUsersInterests: setUsersInterests,
     };
 
     return <InterestsContext.Provider value={value}>{children}</InterestsContext.Provider>

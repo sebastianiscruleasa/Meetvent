@@ -5,6 +5,7 @@ import ButtonContainedLarge from "../components/ui/ButtonContainedLarge";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {useCallback, useContext, useEffect, useState} from "react";
+import {InterestsContext} from "../store/interests-context";
 
 function EventDetailScreen({route}) {
     const eventId = route.params.eventId;
@@ -37,6 +38,29 @@ function EventDetailScreen({route}) {
     useEffect(() => {
         fetchEvent();
     }, [fetchEvent])
+
+    const interestsCtx = useContext(InterestsContext);
+    async function goingHandler() {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:8080/events/${eventId}/join`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${authCtx.token}`
+            },
+        })
+        if (!response.ok) {
+            Alert.alert('Something went wrong!', 'Please try again later!');
+            setIsLoading(false);
+        } else {
+            const data = await response.json();
+            setEvent((prevState) => {
+                return {...prevState, ... {going: true}}
+            })
+            interestsCtx.setUsersInterests(data)
+        }
+        setIsLoading(false)
+    }
+
 
 
     if (isLoading || !event) {
@@ -71,8 +95,10 @@ function EventDetailScreen({route}) {
                 <Text style={styles.description}>{event.description}</Text>
             </ScrollView>
             <View style={styles.buttonContainer}>
+                {!event.going &&
                 <ButtonContainedLarge color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={24}
-                                      iconOnTheRight={true}>GOING</ButtonContainedLarge>
+                                      iconOnTheRight={true} onPress={goingHandler}>GOING</ButtonContainedLarge>
+                }
             </View>
         </View>
     )
