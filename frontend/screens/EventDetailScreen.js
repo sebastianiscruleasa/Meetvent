@@ -5,6 +5,8 @@ import ButtonContainedLarge from "../components/ui/ButtonContainedLarge";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {useCallback, useContext, useEffect, useState} from "react";
+import {InterestsContext} from "../store/interests-context";
+import interests from "../constants/interests";
 
 function EventDetailScreen({route}) {
     const eventId = route.params.eventId;
@@ -29,7 +31,8 @@ function EventDetailScreen({route}) {
         } else {
             const data = await response.json();
             const address = `${data.address.street}, ${data.address.city}`;
-            setEvent({...data, "address": address});
+            const interest = interests.find(interest => interest.key === data.interestKey)
+            setEvent({...data, address: address, interest: interest})
         }
         setIsLoading(false);
     }, [eventId])
@@ -38,16 +41,37 @@ function EventDetailScreen({route}) {
         fetchEvent();
     }, [fetchEvent])
 
+    const interestsCtx = useContext(InterestsContext);
+
+    async function goingHandler() {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:8080/events/${eventId}/join`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${authCtx.token}`
+            },
+        })
+        if (!response.ok) {
+            Alert.alert('Something went wrong!', 'Please try again later!');
+            setIsLoading(false);
+        } else {
+            const data = await response.json();
+            setEvent((prevState) => {
+                return {...prevState, ...{going: true}}
+            })
+            interestsCtx.setUsersInterests(data)
+        }
+        setIsLoading(false)
+    }
+
 
     if (isLoading || !event) {
         return <LoadingOverlay/>;
     }
 
     const image = "https://media.resources.festicket.com/www/photos/3694-artwork.jpg"
-    const organizer = {
-        name: "Jurj Mihai8",
-        photo: "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px"
-    }
+    const organizerPhoto= "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px"
+
 
     const options = {
         weekday: "long",
@@ -59,6 +83,7 @@ function EventDetailScreen({route}) {
     let newDate = new Date(event.date);
     const updatedDate = newDate.toLocaleDateString("en-US", options)
 
+
     return (
         <View>
             <Image style={styles.image} source={{uri: image}}/>
@@ -66,13 +91,18 @@ function EventDetailScreen({route}) {
             <ScrollView style={styles.container}>
                 <EventDetailRow title={updatedDate} details={event.time} icon="calendar"/>
                 <EventDetailRow title={event.location} details={event.address} icon="location"/>
-                <EventDetailRow title={organizer.name} details="Organizer" image={organizer.photo}/>
-                <Text style={styles.about}>About Event</Text>
-                <Text style={styles.description}>{event.description}</Text>
+                {event.organizer && <EventDetailRow title={event.organizer.username} details="Organizer" image={organizerPhoto}/>}
+                {event.interest && <EventDetailRow title={event.interest.name} details="Category" icon={event.interest.icon} color={event.interest.color} iconColor="white"/>}
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <ButtonContainedLarge color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={24}
-                                      iconOnTheRight={true}>GOING</ButtonContainedLarge>
+                {!event.going &&
+                    <ButtonContainedLarge color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={24}
+                                          iconOnTheRight={true} onPress={goingHandler}>GOING</ButtonContainedLarge>
+                }
+                {event.going &&
+                    <ButtonContainedLarge color="#34b233" icon="checkmark-circle-outline" iconSize={24}
+                                          iconOnTheRight={true}>You are coming</ButtonContainedLarge>
+                }
             </View>
         </View>
     )

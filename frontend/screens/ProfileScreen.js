@@ -6,18 +6,19 @@ import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../store/auth-context";
 import * as ImagePicker from 'expo-image-picker';
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import {InterestsContext} from "../store/interests-context";
 
 const DUMMY_PROFILE = {
     image: "https://media.istockphoto.com/id/1208175274/vector/avatar-vector-icon-simple-element-illustrationavatar-vector-icon-material-concept-vector.jpg?s=612x612&w=0&k=20&c=t4aK_TKnYaGQcPAC5Zyh46qqAtuoPcb-mjtQax3_9Xc=",
     name: "Marco Reus",
     about: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.",
-    interests: ["Movies", "Football", "Art", "Concert", "Music", "Online Games"]
 }
 
 function ProfileScreen() {
-    const {image, about, interests} = DUMMY_PROFILE;
+    const {image, about} = DUMMY_PROFILE;
 
     const authCtx = useContext(AuthContext);
+    const interestsCtx = useContext(InterestsContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [user, setUser] = useState({});
@@ -63,6 +64,8 @@ function ProfileScreen() {
             setSelectedImage(result.assets[0].uri);
         }
     };
+
+    const interests = interestsCtx.interests.filter((interest) => interest.counterEvents >= 3).map(interest => interest.interestKey);
 
     return (
         <ScrollView>

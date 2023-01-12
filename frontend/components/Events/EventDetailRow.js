@@ -2,13 +2,13 @@ import {Image, StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import colors from "../../constants/colors";
 
-function EventDetailRow({image, icon, title, details}) {
+function EventDetailRow({image, color, iconColor,  icon, title, details}) {
     return(
         <View style={styles.container}>
-            <View style={styles.imageContainer}>
+            <View style={color ? [styles.imageContainer, {backgroundColor: color}] : styles.imageContainer}>
                 {image &&
                     <Image style={styles.image} source={{uri:image}}/>}
-                {icon && <Ionicons name={icon} color={colors.primary600} size={24} />}
+                {icon && <Ionicons name={icon} color={iconColor ? iconColor : colors.primary600} size={24} />}
             </View>
             <View style={styles.textDetails}>
                 <Text style={styles.title}>{title}</Text>

@@ -1,4 +1,5 @@
 const Interests = [
+    {key: 0, name: "TV Shows", color: "#0D17EE", icon: "filter"},
     {key: 1, name: "Online Games", color: "#7D67EE", icon: "filter"},
     {key: 2, name: "Concert", color: "#EE544A", icon: "filter"},
     {key: 3, name: "Music", color: "#FF8D5D", icon: "filter"},

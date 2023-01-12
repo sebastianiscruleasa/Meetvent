@@ -4,6 +4,7 @@ import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {useCallback, useContext, useEffect, useState} from "react";
 import FiltersDropdown from "../components/Events/Filters/FiltersDropdown";
+import {InterestsContext} from "../store/interests-context";
 
 function EventsScreen({eventsRoute, filtersDropdown}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,10 +12,11 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
     const [activeFilters, setActiveFilters] = useState([]);
 
     const authCtx = useContext(AuthContext);
+    const interestsCtx = useContext(InterestsContext);
 
     const fetchEvents = useCallback(async () => {
         setIsLoading(true);
-        const response = await fetch(`http://localhost:8080/events/city/${authCtx.city}`, {
+        const response = await fetch(`http://localhost:8080/events/city/${interestsCtx.city}`, {
             headers: {
                 "Authorization": `Bearer ${authCtx.token}`
             },
@@ -47,7 +49,7 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
     }
 
     if (events.length === 0) {
-        return <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>;
+        return <Text style={styles.noEventsText}>No events found in {interestsCtx.city}!</Text>;
     }
 
     function onPressFilter(id) {
@@ -57,6 +59,9 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
             setActiveFilters((prevState => prevState.filter(interestId => interestId !== id)))
         }
     }
+
+    // const filteredEvents = events.filter((event) => activeFilters.includes(event.interestKey));
+    // console.log(activeFilters)
 
     return (
         <View>

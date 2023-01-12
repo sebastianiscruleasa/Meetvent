@@ -2,6 +2,7 @@ import {FlatList, StyleSheet, Text, View} from "react-native";
 import EventsPreviewCard from "./EventsPreviewCard";
 
 function EventPreviewList({title, list}) {
+    console.log(list)
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>

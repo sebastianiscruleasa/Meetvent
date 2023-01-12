@@ -11,7 +11,7 @@ function Interests({list}) {
             </View>
             <View style={styles.interestsContainer}>
                 {interests
-                    .filter((interest) => list.includes(interest.name))
+                    .filter((interest) => list.includes(interest.key))
                     .map((interest) => <ButtonContained key={interest.key}
                                                         color={interest.color}>{interest.name}</ButtonContained>)}
             </View>

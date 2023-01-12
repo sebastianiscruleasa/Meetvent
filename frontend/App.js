@@ -23,6 +23,7 @@ import LocationPicker from "./components/Location/LocationPicker";
 import ChatButton from "./components/ui/ChatButton";
 import ChatScreen from "./screens/ChatScreen";
 import FiltersButton from "./components/Events/Filters/FiltersButton";
+import InterestsContextProvider from "./store/interests-context";
 
 function HomeStackNavigator() {
     return (
@@ -160,7 +161,9 @@ function Root() {
 export default function App() {
     return (
         <AuthContextProvider>
-            <Root/>
+            <InterestsContextProvider>
+                <Root/>
+            </InterestsContextProvider>
         </AuthContextProvider>
     );
 }

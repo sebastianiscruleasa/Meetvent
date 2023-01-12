@@ -4,6 +4,7 @@ import SearchHome from "../components/Search/SearchHome";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import {InterestsContext} from "../store/interests-context";
 
 function HomeScreen({navigation}) {
     const [searchedText, setSearchedText] = useState();
@@ -36,11 +37,12 @@ function HomeScreen({navigation}) {
     const [isLoading, setIsLoading] = useState(false);
 
     const authCtx = useContext(AuthContext);
+    const interestsCtx = useContext(InterestsContext);
 
     const fetchEvents = useCallback(async () => {
         setIsLoading(true);
-        if (authCtx.city) {
-            const response = await fetch(`http://localhost:8080/events/city/${authCtx.city}`, {
+        if (interestsCtx.city) {
+            const response = await fetch(`http://localhost:8080/events/city/${interestsCtx.city}`, {
                 headers: {
                     "Authorization": `Bearer ${authCtx.token}`
                 },
@@ -54,7 +56,7 @@ function HomeScreen({navigation}) {
                 setIsLoading(false);
             }
         }
-    }, [authCtx.city])
+    }, [interestsCtx.city])
 
     useEffect(() => {
         fetchEvents();
@@ -66,7 +68,7 @@ function HomeScreen({navigation}) {
                 <SearchHome searchedText={searchedText} searchHandler={searchHandler} data={searchedData}/>
                 {isLoading && <LoadingOverlay/>}
                 {(events.length === 0 && !isLoading) &&
-                    <Text style={styles.noEventsText}>No events found in {authCtx.city}!</Text>}
+                    <Text style={styles.noEventsText}>No events found in {interestsCtx.city}!</Text>}
             </View>
         )
     }

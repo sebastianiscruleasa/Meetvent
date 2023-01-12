@@ -5,6 +5,7 @@ import LoginForm from "../components/Auth/LoginForm";
 import {useContext, useState} from "react";
 import {AuthContext} from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import {InterestsContext} from "../store/interests-context";
 
 function LoginScreen({navigation}) {
     function switchToRegisterHandler() {
@@ -14,6 +15,7 @@ function LoginScreen({navigation}) {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
 
     const authCtx = useContext(AuthContext);
+    const interestsCtx = useContext(InterestsContext);
 
     async function loginHandler({email, password}) {
         setIsAuthenticating(true);
@@ -35,6 +37,7 @@ function LoginScreen({navigation}) {
             setIsAuthenticating(false);
         } else {
             const data = await response.json();
+            interestsCtx.setUsersInterests(data.userInterestCounters);
             authCtx.authenticate(data.token);
         }
     }

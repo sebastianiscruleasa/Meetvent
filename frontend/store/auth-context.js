@@ -5,8 +5,6 @@ import {createContext, useState} from "react";
 export const AuthContext = createContext({
     token: '',
     isAuthenticated: false,
-    city: '',
-    locateUser: (city) => {},
     authenticate: (token) => {
     },
     logout: () => {
@@ -15,12 +13,6 @@ export const AuthContext = createContext({
 
 function AuthContextProvider({children}) {
     const [authToken, setAuthToken] = useState('');
-    const [city, setCity] = useState('');
-
-    function locateUser(city) {
-        setCity(city);
-    }
-
     function authenticate(token) {
         setAuthToken(token);
         AsyncStorage.setItem('token', token);
@@ -34,8 +26,6 @@ function AuthContextProvider({children}) {
     const value = {
         token: authToken,
         isAuthenticated: !!authToken,
-        city: city,
-        locateUser: locateUser,
         authenticate: authenticate,
         logout: logout,
     };
