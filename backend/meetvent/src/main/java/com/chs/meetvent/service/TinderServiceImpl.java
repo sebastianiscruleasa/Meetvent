@@ -111,19 +111,25 @@ public class TinderServiceImpl implements TinderService{
     @Override
     public List<AppUser> findMyMatches(String userToken) {
         AppUser appUser = this.appUserService.getUserFromToken(userToken);
-        List<TinderMatch> tinderMatches = this.tinderMatchRepository.findAllByAppUser1_IdOrAndAppUser2_IdAndUser1ResponseAndUser2Response(
-                appUser.getId(),
-                appUser.getId(),
+        List<TinderMatch> tinderMatchesAsUser1 = this.tinderMatchRepository.findAllByAppUser1AndUser1ResponseAndUser2Response(
+                appUser,
+                "YES",
+                "YES"
+        );
+        List<TinderMatch> tinderMatchesAsUser2 = this.tinderMatchRepository.findAllByAppUser2AndUser1ResponseAndUser2Response(
+                appUser,
                 "YES",
                 "YES"
         );
         List<Long> matchingPeopleIds = new ArrayList<>();
-        for(TinderMatch tinderMatch:tinderMatches) {
-            if(tinderMatch.getAppUser1().getId() != appUser.getId()) {
-                matchingPeopleIds.add(tinderMatch.getAppUser1().getId());
-            }
+        for(TinderMatch tinderMatch:tinderMatchesAsUser1) {
             if(tinderMatch.getAppUser2().getId() != appUser.getId()) {
                 matchingPeopleIds.add(tinderMatch.getAppUser2().getId());
+            }
+        }
+        for(TinderMatch tinderMatch:tinderMatchesAsUser2) {
+            if(tinderMatch.getAppUser1().getId() != appUser.getId()) {
+                matchingPeopleIds.add(tinderMatch.getAppUser1().getId());
             }
         }
         return this.appUserService.getAppUsersWithIdsInList(matchingPeopleIds);
