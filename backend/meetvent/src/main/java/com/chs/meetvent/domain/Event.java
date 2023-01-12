@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
 import javax.swing.text.View;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class Event extends BaseEntity{
     @JsonView(Views.Going.class)
     @Column(nullable = false)
     private boolean going;
+
+    private URI imageUri;
 
     public Address getAddress() {
         return address;
@@ -124,5 +127,13 @@ public class Event extends BaseEntity{
 
     public void setGoing(boolean going) {
         this.going = going;
+    }
+
+    public URI getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(URI imageUri) {
+        this.imageUri = imageUri;
     }
 }

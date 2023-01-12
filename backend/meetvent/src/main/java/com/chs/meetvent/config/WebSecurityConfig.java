@@ -82,7 +82,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/users", "/events" ,"/events/{id}", "/events/{id}/join","/users/events",
                                 "/events/{id}/users", "/events/city/{name}", "/users/update", "/tinder/users", "/tinder/response/user/{id}", "/users/image").authenticated()
-                .requestMatchers("/auth/signup", "/auth/signin", "/auth/test", "/users/image/{id}").permitAll()
+                .requestMatchers("/auth/signup", "/auth/signin", "/auth/test", "/users/image/{id}", "/events/{id}/image").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
 

@@ -84,9 +84,10 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public void updateEventImage(String id, MultipartFile image) throws IOException {
+    public Event updateEventImage(String id, MultipartFile image) throws IOException {
         Event event = this.getEventById(id);
         event.setImage(ImageUtils.compressImage(image.getBytes()));
+        return event;
     }
 
     @Override
@@ -127,5 +128,12 @@ public class EventServiceImpl implements EventService{
         }
         this.eventRepository.save(event);
         return event;
+    }
+
+    @Override
+    public byte[] getEventImage(String id) {
+        Event event = this.getEventById(id);
+        byte[] image = ImageUtils.decompressImage(event.getImage());
+        return image;
     }
 }
