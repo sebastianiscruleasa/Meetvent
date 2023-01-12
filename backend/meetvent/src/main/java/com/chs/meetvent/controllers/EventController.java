@@ -7,6 +7,7 @@ import com.chs.meetvent.domain.UserInterestCounter;
 import com.chs.meetvent.domain.dto.JSONMessageResponse;
 import com.chs.meetvent.domain.views.Views;
 import com.chs.meetvent.jwt.JwtUtils;
+import com.chs.meetvent.repository.EventRepository;
 import com.chs.meetvent.service.AppUserService;
 import com.chs.meetvent.service.EventService;
 import com.chs.meetvent.service.ImageUtils;
@@ -29,8 +30,11 @@ import java.util.NoSuchElementException;
 @RequestMapping("/events")
 public class EventController {
     private EventService eventService;
-    public EventController(EventService eventService) {
+    private EventRepository eventRepository;
+    public EventController(EventService eventService,
+                           EventRepository eventRepository) {
         this.eventService = eventService;
+        this.eventRepository = eventRepository;
     }
 
     @GetMapping()
@@ -72,14 +76,25 @@ public class EventController {
 
     @PostMapping(path="/{id}/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> updateEventImage(@PathVariable String id, @ModelAttribute MultipartFile image) throws IOException {
-        this.eventService.updateEventImage(id, image);
-        return ResponseEntity.status(HttpStatus.OK).body(new JSONMessageResponse("Added image to event with id="+id));
+        Event event = this.eventService.updateEventImage(id, image);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(event.getId()).toUri();
+        if(event.getImage() != null) {
+            event.setImageUri(location);
+            this.eventRepository.save(event);
+        }
+        return new ResponseEntity<>(this.eventRepository.save(event), HttpStatus.OK);
+    }
+
+    @GetMapping(path="/{id}/image")
+    public ResponseEntity<?> getImage(@PathVariable String id) {
+        byte[] image = this.eventService.getEventImage(id);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
     }
 
     @PostMapping("/{id}/join") //join an Event as a User
     @JsonView(Views.Public.class)
-    public ResponseEntity<UserInterestCounter> joinEvent(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id) {
-        UserInterestCounter userInterestCounter = this.eventService.joinEvent(token, id);
-        return new ResponseEntity<>(userInterestCounter, HttpStatus.OK);
+    public List<UserInterestCounter> joinEvent(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @PathVariable String id) {
+        List<UserInterestCounter> userInterests = this.eventService.joinEvent(token, id);
+        return userInterests;
     }
 }

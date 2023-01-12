@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping(path="/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<AppUser> updateProfile(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image) throws IOException {
+    public ResponseEntity<AppUser> updateImage(@RequestHeader(SecurityConstants.JWT_HEADER) String token, @ModelAttribute MultipartFile image) throws IOException {
         AppUser user = this.appUserService.updateUserProfile(token, image);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
         user = this.appUserRepository.save(user);

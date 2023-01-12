@@ -84,9 +84,10 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public void updateEventImage(String id, MultipartFile image) throws IOException {
+    public Event updateEventImage(String id, MultipartFile image) throws IOException {
         Event event = this.getEventById(id);
         event.setImage(ImageUtils.compressImage(image.getBytes()));
+        return event;
     }
 
     @Override
@@ -98,7 +99,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public UserInterestCounter joinEvent(String userToken, String eventId) {
+    public List<UserInterestCounter> joinEvent(String userToken, String eventId) {
         AppUser appUser = this.appUserService.getUserFromToken(userToken);
         Event event = this.getEventById(eventId);
         UserInterestCounter userInterestCounter;
@@ -113,7 +114,8 @@ public class EventServiceImpl implements EventService{
                 userInterestCounter = this.userInterestCounterService.saveNewElement(event.getInterestKey(), appUser);
             }
         }
-        return userInterestCounter;
+        List<UserInterestCounter> userInterests = this.userInterestCounterService.getAllInterestsForUser(appUser);
+        return userInterests;
     }
 
     @Override
@@ -127,5 +129,12 @@ public class EventServiceImpl implements EventService{
         }
         this.eventRepository.save(event);
         return event;
+    }
+
+    @Override
+    public byte[] getEventImage(String id) {
+        Event event = this.getEventById(id);
+        byte[] image = ImageUtils.decompressImage(event.getImage());
+        return image;
     }
 }

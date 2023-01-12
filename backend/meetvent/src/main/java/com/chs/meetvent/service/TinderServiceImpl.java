@@ -107,4 +107,25 @@ public class TinderServiceImpl implements TinderService{
         tinderMatch.setUser1Response(tinderResponse);
         return this.tinderMatchRepository.save(tinderMatch);
     }
+
+    @Override
+    public List<AppUser> findMyMatches(String userToken) {
+        AppUser appUser = this.appUserService.getUserFromToken(userToken);
+        List<TinderMatch> tinderMatches = this.tinderMatchRepository.findAllByAppUser1_IdOrAndAppUser2_IdAndUser1ResponseAndUser2Response(
+                appUser.getId(),
+                appUser.getId(),
+                "YES",
+                "YES"
+        );
+        List<Long> matchingPeopleIds = new ArrayList<>();
+        for(TinderMatch tinderMatch:tinderMatches) {
+            if(tinderMatch.getAppUser1().getId() != appUser.getId()) {
+                matchingPeopleIds.add(tinderMatch.getAppUser1().getId());
+            }
+            if(tinderMatch.getAppUser2().getId() != appUser.getId()) {
+                matchingPeopleIds.add(tinderMatch.getAppUser2().getId());
+            }
+        }
+        return this.appUserService.getAppUsersWithIdsInList(matchingPeopleIds);
+    }
 }
