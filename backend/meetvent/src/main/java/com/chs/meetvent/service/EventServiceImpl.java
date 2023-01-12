@@ -79,7 +79,8 @@ public class EventServiceImpl implements EventService{
     }
 
     @Transactional
-    public List<Event> getEventsFromCity(String cityName) {
+    public List<Event> getEventsFromCity(String cityName, String token) {
+        this.getAllEvents(token);
         return this.eventRepository.findAllByAddress_City(cityName);
     }
 

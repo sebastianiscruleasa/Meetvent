@@ -69,9 +69,9 @@ public class EventController {
     }
 
     @GetMapping("city/{name}")
-    @JsonView(Views.Public.class)
-    public List<Event> getEventsFromCity(@PathVariable String name) {
-        return this.eventService.getEventsFromCity(name);
+    @JsonView(Views.Going.class)
+    public List<Event> getEventsFromCity(@PathVariable String name, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+        return this.eventService.getEventsFromCity(name, token);
     }
 
     @PostMapping(path="/{id}/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
