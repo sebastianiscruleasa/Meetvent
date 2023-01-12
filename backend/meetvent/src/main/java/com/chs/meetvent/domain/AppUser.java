@@ -31,7 +31,7 @@ public class AppUser extends BaseEntity{
     @JsonView(Views.Internal.class)
     @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER)
     private List<UserInterestCounter> userInterestCounters = new ArrayList<>();
-    @JsonView(Views.Internal.class)
+    @JsonView(Views.Public.class)
     private URI imageUri;
     @JsonView(Views.Internal.class)
     private String token;
