@@ -2,6 +2,13 @@ import {Image, Pressable, StyleSheet, Text, View} from "react-native";
 import colors from "../../constants/colors";
 
 function SearchDropdownCard({id, image, date, title, onPressHandler}) {
+    const options = {
+        month: "long",
+        day: "numeric",
+    };
+
+    let newDate = new Date(date);
+    const updatedDate = newDate.toLocaleDateString("en-GB", options)
     return (
         <Pressable onPress={() => onPressHandler(id)} style={({pressed}) =>
             pressed
@@ -13,7 +20,7 @@ function SearchDropdownCard({id, image, date, title, onPressHandler}) {
             </View>
             <View style={styles.detailsContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <Text style={styles.date}>{date}</Text>
+                <Text style={styles.date}>{updatedDate}</Text>
             </View>
         </Pressable>
     )

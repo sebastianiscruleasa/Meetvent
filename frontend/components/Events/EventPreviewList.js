@@ -2,7 +2,6 @@ import {FlatList, StyleSheet, Text, View} from "react-native";
 import EventsPreviewCard from "./EventsPreviewCard";
 
 function EventPreviewList({title, list}) {
-    console.log(list)
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
@@ -10,7 +9,7 @@ function EventPreviewList({title, list}) {
                       keyExtractor={(event) => event.id} renderItem={(itemData) =>
                 <EventsPreviewCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
                                    date={itemData.item.date}
-                                   location={itemData.item.location}/>
+                                   location={itemData.item.location} going={itemData.item.going}/>
             }/>
         </View>
     )

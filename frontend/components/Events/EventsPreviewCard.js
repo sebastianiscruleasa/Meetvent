@@ -14,12 +14,12 @@ function EventsPreviewCard({id, image, date, title, location, going}) {
     }
 
     const options = {
-        month: "long",
+        month: "short",
     };
 
     let newFormatDate = new Date(date);
     const day = newFormatDate.getDay();
-    const month = newFormatDate.toLocaleDateString("en-US", options)
+    const month = newFormatDate.toLocaleDateString("en-US", options).toUpperCase();
 
     return (
         <Pressable onPress={pressHandler} style={({pressed}) =>
@@ -33,10 +33,10 @@ function EventsPreviewCard({id, image, date, title, location, going}) {
                         <Text style={styles.dateText}>{day}</Text>
                         <Text style={styles.dateText}>{month}</Text>
                     </View>
-                    {going &&
-                        <Pressable style={styles.goingContainer}>
+                    {going === true &&
+                        (<Pressable style={styles.goingContainer}>
                             <Ionicons name="checkmark-circle" color="#34b233" size={16} style={styles.favorite}/>
-                        </Pressable>
+                        </Pressable>)
                     }
                 </View>
                 <Image style={styles.image} source={{uri: image}}/>

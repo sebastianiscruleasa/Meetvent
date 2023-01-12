@@ -60,13 +60,12 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
         }
     }
 
-    // const filteredEvents = events.filter((event) => activeFilters.includes(event.interestKey));
-    // console.log(activeFilters)
+    const filteredEvents = events.filter((event) => activeFilters.includes(event.interestKey));
 
     return (
         <View>
             {filtersDropdown && <FiltersDropdown activeFilters={activeFilters} onPressFilter={onPressFilter}/>}
-            <FlatList data={events} keyExtractor={(event) => event.id} renderItem={(itemData) =>
+            <FlatList data={activeFilters.length === 0 ? events : filteredEvents} keyExtractor={(event) => event.id} renderItem={(itemData) =>
                 <EventCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
                            date={itemData.item.date}
                            location={itemData.item.location}/>
