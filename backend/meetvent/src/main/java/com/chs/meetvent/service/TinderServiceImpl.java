@@ -5,12 +5,14 @@ import com.chs.meetvent.domain.TinderMatch;
 import com.chs.meetvent.repository.AppUserRepository;
 import com.chs.meetvent.repository.TinderMatchRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class TinderServiceImpl implements TinderService{
     private AppUserService appUserService;
     private TinderMatchRepository tinderMatchRepository;
