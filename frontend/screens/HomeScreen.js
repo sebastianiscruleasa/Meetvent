@@ -79,7 +79,7 @@ function HomeScreen({navigation}) {
             {searchedText && <View style={styles.searching}/>}
             <View style={styles.innerContainer}>
                 <EventPreviewList title="Trending" list={events}/>
-                <EventPreviewList title="Your Upcoming Events" list={events}/>
+                <EventPreviewList title="New Events" list={events}/>
             </View>
         </View>
     )

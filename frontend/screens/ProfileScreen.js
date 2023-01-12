@@ -85,7 +85,7 @@ function ProfileScreen() {
                 </View>
                 <Text>{about}</Text>
             </View>
-            <Interests list={interests}/>
+            {interests.length !== 0 && (<Interests list={interests}/>)}
             <View style={styles.buttons}>
                 <ButtonOutlined color={colors.error500} icon="log-out-outline" iconSize={22}
                                 iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonOutlined>

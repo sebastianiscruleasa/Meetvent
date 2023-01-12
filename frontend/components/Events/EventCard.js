@@ -13,6 +13,16 @@ function EventCard({id, image, date, title, location}) {
         })
     }
 
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+
+    let newDate = new Date(date);
+    const updatedDate = newDate.toLocaleDateString("en-US", options)
+
     return (
         <Pressable onPress={pressHandler} style={({pressed}) =>
             pressed
@@ -23,7 +33,7 @@ function EventCard({id, image, date, title, location}) {
                 <Image style={styles.image} source={{uri: image}}/>
             </View>
             <View style={styles.detailsContainer}>
-                <Text style={styles.date}>{date}</Text>
+                <Text style={styles.date}>{updatedDate}</Text>
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.location}>
                     <Ionicons name="location" color={colors.grey800}/>

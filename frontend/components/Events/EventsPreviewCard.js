@@ -13,13 +13,16 @@ function EventsPreviewCard({id, image, date, title, location, going}) {
         })
     }
 
-    const options = {
+    let newFormatDate = new Date(date);
+    const optionsDay = {
+        day: "numeric",
+    };
+    const day = newFormatDate.toLocaleDateString("en-US", optionsDay);
+
+    const optionsMonth = {
         month: "short",
     };
-
-    let newFormatDate = new Date(date);
-    const day = newFormatDate.getDay();
-    const month = newFormatDate.toLocaleDateString("en-US", options).toUpperCase();
+    const month = newFormatDate.toLocaleDateString("en-US", optionsMonth).toUpperCase();
 
     return (
         <Pressable onPress={pressHandler} style={({pressed}) =>

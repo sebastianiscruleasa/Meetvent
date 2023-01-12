@@ -66,7 +66,7 @@ function EventsScreen({eventsRoute, filtersDropdown}) {
         <View>
             {filtersDropdown && <FiltersDropdown activeFilters={activeFilters} onPressFilter={onPressFilter}/>}
             <FlatList data={activeFilters.length === 0 ? events : filteredEvents} keyExtractor={(event) => event.id} renderItem={(itemData) =>
-                <EventCard id={itemData.item.id} image={itemData.item.image} title={itemData.item.title}
+                <EventCard id={itemData.item.id} image={itemData.item.imageUri} title={itemData.item.title}
                            date={itemData.item.date}
                            location={itemData.item.location}/>
             }/>

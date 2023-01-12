@@ -69,7 +69,6 @@ function EventDetailScreen({route}) {
         return <LoadingOverlay/>;
     }
 
-    const image = "https://media.resources.festicket.com/www/photos/3694-artwork.jpg"
     const organizerPhoto= "https://img.bundesliga.com/tachyon/sites/2/2022/11/2223_MD02_SCFBVB_CKB_136-1-scaled.jpg?crop=215px%2C0px%2C2129px%2C1703px"
 
 
@@ -86,7 +85,7 @@ function EventDetailScreen({route}) {
 
     return (
         <View>
-            <Image style={styles.image} source={{uri: image}}/>
+            <Image style={styles.image} source={{uri: event.imageUri}}/>
             <Text style={styles.title}>{event.title}</Text>
             <ScrollView style={styles.container}>
                 <EventDetailRow title={updatedDate} details={event.time} icon="calendar"/>

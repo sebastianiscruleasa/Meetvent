@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         borderColor: colors.primary100,
         borderWidth: 5,
         marginHorizontal: 16,
-        position:"absolute",
-        zIndex: 2,
+        // position:"absolute",
+        // zIndex: 2,
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent:"space-evenly"
