@@ -110,9 +110,10 @@ const styles = StyleSheet.create({
     },
     detailsContainer:{
         justifyContent: "space-between",
+        alignItems: "flex-start",
+        width:"80%",
         marginVertical: 12,
-        marginHorizontal: 4,
-        flex: 1
+        flex: 1,
     },
     title: {
         fontWeight: "bold",

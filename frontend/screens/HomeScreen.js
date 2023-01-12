@@ -72,13 +72,13 @@ function HomeScreen({navigation}) {
             </View>
         )
     }
-
+    const newEvents = events.slice().reverse();
     return (
         <View style={styles.outerContainer}>
             <SearchHome searchedText={searchedText} searchHandler={searchHandler} data={searchedData}/>
             {searchedText && <View style={styles.searching}/>}
             <View style={styles.innerContainer}>
-                <EventPreviewList title="Trending" list={events}/>
+                <EventPreviewList title="Trending" list={newEvents}/>
                 <EventPreviewList title="New Events" list={events}/>
             </View>
         </View>
