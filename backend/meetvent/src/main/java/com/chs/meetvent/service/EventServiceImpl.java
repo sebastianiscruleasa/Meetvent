@@ -85,6 +85,12 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    public List<Event> getTrendingEventsFromCity(String city, String token) {
+        this.getAllEvents(token);
+        return this.eventRepository.findAllByAddress_CityOrderByAttendeesSize(city);
+    }
+
+    @Override
     public Event updateEventImage(String id, MultipartFile image) throws IOException {
         Event event = this.getEventById(id);
         event.setImage(ImageUtils.compressImage(image.getBytes()));

@@ -74,6 +74,12 @@ public class EventController {
         return this.eventService.getEventsFromCity(name, token);
     }
 
+    @GetMapping("trending/city/{name}")
+    @JsonView(Views.Going.class)
+    public List<Event> getTrendingEventsFromCity(@PathVariable String name, @RequestHeader(SecurityConstants.JWT_HEADER) String token) {
+        return this.eventService.getTrendingEventsFromCity(name, token);
+    }
+
     @PostMapping(path="/{id}/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> updateEventImage(@PathVariable String id, @ModelAttribute MultipartFile image) throws IOException {
         Event event = this.eventService.updateEventImage(id, image);

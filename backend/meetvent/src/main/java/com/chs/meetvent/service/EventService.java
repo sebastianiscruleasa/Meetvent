@@ -16,6 +16,7 @@ public interface EventService {
     void deleteEventById(Long id);
     List<AppUser> getUserForEvents(String id);
     List<Event> getEventsFromCity(String city, String token);
+    List<Event> getTrendingEventsFromCity(String city, String token);
     Event updateEventImage(String id, MultipartFile image) throws IOException;
     Event createEvent(Event event, String token);
     List<UserInterestCounter> joinEvent(String userToken, String eventId);
