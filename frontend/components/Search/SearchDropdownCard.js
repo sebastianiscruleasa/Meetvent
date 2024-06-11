@@ -1,12 +1,11 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
 import colors from "../../constants/colors";
 
-function SearchDropdownCard({id, image, date, title, onPressHandler}) {
+function SearchDropdownCard({id, imageUri, date, title, onPressHandler}) {
     const options = {
         month: "long",
         day: "numeric",
     };
-
     let newDate = new Date(date);
     const updatedDate = newDate.toLocaleDateString("en-GB", options)
     return (
@@ -16,7 +15,7 @@ function SearchDropdownCard({id, image, date, title, onPressHandler}) {
                 : [styles.container]
         }>
             <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: image}}/>
+                <Image style={styles.image} source={{uri: imageUri}}/>
             </View>
             <View style={styles.detailsContainer}>
                 <Text style={styles.title}>{title}</Text>

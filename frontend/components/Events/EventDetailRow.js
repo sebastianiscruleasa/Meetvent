@@ -8,7 +8,7 @@ function EventDetailRow({image, color, iconColor,  icon, title, details}) {
             <View style={color ? [styles.imageContainer, {backgroundColor: color}] : styles.imageContainer}>
                 {image &&
                     <Image style={styles.image} source={{uri:image}}/>}
-                {icon && <Ionicons name={icon} color={iconColor ? iconColor : colors.primary600} size={24} />}
+                {icon && <Ionicons name={icon} color={iconColor ? iconColor : colors.primary500} size={24} />}
             </View>
             <View style={styles.textDetails}>
                 <Text style={styles.title}>{title}</Text>

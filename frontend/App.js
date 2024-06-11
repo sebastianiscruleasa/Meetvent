@@ -1,126 +1,15 @@
-import {NavigationContainer} from '@react-navigation/native'
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Ionicons} from '@expo/vector-icons';
-
-import HomeScreen from "./screens/HomeScreen";
-import EventsScreen from "./screens/EventsScreen";
-import ConnectScreen from "./screens/ConnectScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import EventDetailScreen from "./screens/EventDetailScreen";
-
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
-
-import colors from "./constants/colors";
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
+import * as encoding from "text-encoding";
+import {NavigationContainer} from "@react-navigation/native";
 import {useContext, useEffect, useState} from "react";
 import AuthContextProvider, {AuthContext} from "./store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingOverlay from "./components/ui/LoadingOverlay";
-import LocationPicker from "./components/Location/LocationPicker";
-import ChatButton from "./components/ui/ChatButton";
-import ChatScreen from "./screens/ChatScreen";
-import FiltersButton from "./components/Events/Filters/FiltersButton";
 import InterestsContextProvider from "./store/interests-context";
-
-function HomeStackNavigator() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} options={{
-                headerStyle: {
-                    backgroundColor: colors.primary500,
-                },
-                headerTitle: LocationPicker,
-                headerRight: ChatButton,
-                headerTintColor: "white",
-                headerShadowVisible: false
-            }}/>
-            <Stack.Screen name="EventDetailScreenHome" component={EventDetailScreen} options={{
-                title: "Event Details"
-            }}/>
-            <Stack.Screen name="ChatScreen" component={ChatScreen} options={{
-                title: "Chat"
-            }}/>
-        </Stack.Navigator>
-    )
-}
-
-function EventsStackNavigator({route}) {
-    const [filtersDropdownActive, setFilterDropdownActive] = useState(false);
-
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Events" options={{
-                headerRight: () => {
-                    return (<FiltersButton onPress={() =>
-                        setFilterDropdownActive(
-                            prevState => !prevState
-                        )
-
-                    }/>)
-                }
-            }}>
-                {
-                    () => {
-                        return (<EventsScreen eventsRoute={route} filtersDropdown={filtersDropdownActive}/>)
-                    }
-                }
-            </Stack.Screen>
-            <Stack.Screen name="EventDetailScreenEvents" component={EventDetailScreen} options={{
-                title: "Event details"}}/>
-        </Stack.Navigator>
-    )
-}
-
-function AuthenticatedNavigator() {
-    return (
-        <Tab.Navigator
-            screenOptions={{
-                tabBarActiveTintColor: colors.primary500
-            }}
-        >
-            <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{
-                title: "Home",
-                headerShown: false,
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="home" color={color} size={size}/>
-                ),
-            }}/>
-            <Tab.Screen name="EventsStack" component={EventsStackNavigator} options={{
-                title: "Events",
-                headerShown: false,
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="calendar" color={color} size={size}/>
-                ),
-            }}/>
-            <Tab.Screen name="Connect" component={ConnectScreen} options={{
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="infinite" color={color} size={size}/>
-                ),
-            }}/>
-            <Tab.Screen name="Profile" component={ProfileScreen} options={{
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="person" color={color} size={size}/>
-                ),
-            }}/>
-        </Tab.Navigator>
-    )
-}
-
-function AuthNavigator() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} options={{
-                headerShown: false,
-            }}/>
-            <Stack.Screen name="Register" component={RegisterScreen} options={{
-                headerShown: false,
-            }}/>
-        </Stack.Navigator>
-    )
-}
+import AuthenticatedNavigator from "./navigators/AuthenticatedUserNavigator";
+import AuthNavigator from "./navigators/AuthNavigator";
+import Roles from "./constants/roles";
+import AuthenticatedUserNavigator from "./navigators/AuthenticatedUserNavigator";
+import AuthenticatedAdminNavigator from "./navigators/AuthenticatedAdminNavigator";
 
 function Navigation() {
     const authCtx = useContext(AuthContext);
@@ -128,9 +17,10 @@ function Navigation() {
     return (
         <NavigationContainer>
             {!authCtx.isAuthenticated && <AuthNavigator/>}
-            {authCtx.isAuthenticated && <AuthenticatedNavigator/>}
+            {authCtx.isAuthenticated && authCtx.role===Roles.USER && <AuthenticatedUserNavigator/>}
+            {authCtx.isAuthenticated && authCtx.role===Roles.ADMIN && <AuthenticatedAdminNavigator/>}
         </NavigationContainer>
-    )
+    );
 }
 
 function Root() {
@@ -140,16 +30,22 @@ function Root() {
 
     useEffect(() => {
         async function fetchToken() {
-            const storedToken = await AsyncStorage.getItem('token');
-
-            if (storedToken) {
-                authCtx.authenticate(storedToken);
+            const storedToken = await AsyncStorage.getItem("token");
+            const storedUserId = await AsyncStorage.getItem("userId");
+            const storedRole = await AsyncStorage.getItem("role");
+            const loginObject = {
+                token: storedToken,
+                id: parseInt(storedUserId, 10),
+                role: storedRole
+            }
+            if (storedToken && storedUserId && storedRole) {
+                authCtx.authenticate(loginObject);
             }
 
             setIsTryingLogin(false);
         }
 
-        fetchToken();
+        fetchToken().catch(error => console.log(error));
     }, []);
 
     if (isTryingLogin) {

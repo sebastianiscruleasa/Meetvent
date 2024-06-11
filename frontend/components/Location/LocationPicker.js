@@ -31,8 +31,12 @@ function LocationPicker() {
             return;
         }
 
-        const location = await getCurrentPositionAsync();
-        const address = await getAddress(location.coords.latitude, location.coords.longitude);
+        // const location = await getCurrentPositionAsync();
+        // const address = await getAddress(location.coords.latitude, location.coords.longitude);
+        const address = {
+            city: "Cluj",
+            country: "Romania"
+        }
         interestsCtx.locateUser(address.city);
         const displayedAddress = `${address.city}, ${address.country}`;
         setCurrentLocation(displayedAddress);

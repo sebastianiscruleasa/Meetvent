@@ -49,12 +49,12 @@ function RegisterForm({onAuthenticate}) {
         ) {
             Alert.alert('Invalid input', 'Please check your entered credentials.');
             setCredentials((currentCredentials) => {
-               return {
-                   username:{ value:currentCredentials.username.value , isInvalid: false},
-                   email:{ value:currentCredentials.email.value , isInvalid: !emailIsValid},
-                   password:{ value:currentCredentials.password.value , isInvalid: !passwordIsValid},
-                   confirmPassword:{ value:currentCredentials.confirmPassword.value , isInvalid: !passwordIsValid || !passwordsAreEqual},
-               }
+                return {
+                    username:{ value:currentCredentials.username.value , isInvalid: false},
+                    email:{ value:currentCredentials.email.value , isInvalid: !emailIsValid},
+                    password:{ value:currentCredentials.password.value , isInvalid: !passwordIsValid},
+                    confirmPassword:{ value:currentCredentials.confirmPassword.value , isInvalid: !passwordIsValid || !passwordsAreEqual},
+                }
             });
             return;
         }
@@ -99,7 +99,7 @@ function RegisterForm({onAuthenticate}) {
             />
             <View style={styles.buttons}>
                 <ButtonContainedLarge color={colors.primary500} icon="arrow-forward-circle-outline" iconSize={28}
-                                 iconOnTheRight={true} onPress={submitHandler}>REGISTER</ButtonContainedLarge>
+                                      iconOnTheRight={true} onPress={submitHandler}>REGISTER</ButtonContainedLarge>
             </View>
         </View>
     )

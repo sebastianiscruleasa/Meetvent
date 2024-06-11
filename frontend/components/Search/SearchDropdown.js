@@ -7,13 +7,11 @@ function SearchDropdown({data, onNavigateHandler}) {
         <View style={styles.container}>
             {data.length !== 0 &&
                 <FlatList data={data} keyExtractor={(event) => event.id} renderItem={(itemData) =>
-                    <SearchDropdownCard id={itemData.item.id} image={itemData.item.imageUri}
-                                        title={itemData.item.title}
-                                        date={itemData.item.date} onPressHandler={onNavigateHandler}/>
+                    <SearchDropdownCard {...itemData.item} onPressHandler={onNavigateHandler}/>
                 }/>}
             {data.length === 0 &&
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.title}>No result found!</Text>
+                    <Text style={styles.emptyTitle}>No result found!</Text>
                 </View>
             }
         </View>
@@ -31,7 +29,7 @@ const styles = StyleSheet.create({
     },
     emptyContainer: {
         backgroundColor: "#FFFFFF",
-        height: 66,
+        height: 60,
         width: 350,
         margin: 4,
         borderRadius: 8,
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
-    title: {
+    emptyTitle: {
         fontWeight: "bold",
         fontSize: 20
     }

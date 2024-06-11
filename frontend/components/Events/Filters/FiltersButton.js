@@ -1,30 +1,40 @@
-import {Pressable, StyleSheet} from "react-native";
+import {Pressable, StyleSheet, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
-import colors from "../../../constants/colors";
+import Colors from "../../../constants/colors";
+import {Badge} from "@rneui/base";
 
-function FiltersButton({onPress}) {
+function FiltersButton({onPress, isActive, filtersNumber}) {
+    const color = isActive ? "white" : Colors.primary500;
+    const backgroundColor = isActive ? Colors.primary500 : "white";
     return (
-        <Pressable
-            style={({pressed}) =>
+        <View style={[styles.buttonOuterContainer, {backgroundColor: backgroundColor, borderColor: color}]}>
+            {filtersNumber > 0 && <Badge
+                status="error"
+                value={filtersNumber}
+                containerStyle={{ position: 'absolute', top: -2, right:-2, zIndex:1}}
+            />}
+            <Pressable onPress={onPress} style={({pressed}) =>
                 pressed
-                    ? [styles.container, styles.pressed]
-                    : [styles.container]
-            }
-            onPress={onPress}
-        >
-            <Ionicons name="filter" color="white" size={20}/>
-        </Pressable>
+                    ? [styles.buttonInnerContainer, styles.pressed]
+                    : [styles.buttonInnerContainer]
+            }>
+                <Ionicons name="filter" color={color} size={24}/>
+            </Pressable>
+        </View>
     )
 }
 
 export default FiltersButton;
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: colors.primary600,
+    buttonOuterContainer: {
         paddingHorizontal: 8,
         paddingVertical: 6,
-        borderRadius: 20
+        borderRadius: 20,
+        borderWidth: 1,
+    },
+    buttonInnerContainer: {
+        overflow: "hidden"
     },
     pressed: {
         opacity: 0.75,

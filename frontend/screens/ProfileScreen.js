@@ -4,15 +4,17 @@ import ButtonOutlined from "../components/ui/ButtonOutlined";
 import colors from "../constants/colors";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../store/auth-context";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {InterestsContext} from "../store/interests-context";
 
 const DUMMY_PROFILE = {
-    image: "https://media.istockphoto.com/id/1208175274/vector/avatar-vector-icon-simple-element-illustrationavatar-vector-icon-material-concept-vector.jpg?s=612x612&w=0&k=20&c=t4aK_TKnYaGQcPAC5Zyh46qqAtuoPcb-mjtQax3_9Xc=",
+    image:
+        "https://media.istockphoto.com/id/1208175274/vector/avatar-vector-icon-simple-element-illustrationavatar-vector-icon-material-concept-vector.jpg?s=612x612&w=0&k=20&c=t4aK_TKnYaGQcPAC5Zyh46qqAtuoPcb-mjtQax3_9Xc=",
     name: "Marco Reus",
-    about: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.",
-}
+    about:
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.",
+};
 
 function ProfileScreen() {
     const {image, about} = DUMMY_PROFILE;
@@ -28,25 +30,22 @@ function ProfileScreen() {
         setIsLoading(true);
         const response = await fetch(`http://localhost:8080/users`, {
             headers: {
-                "Authorization": `Bearer ${authCtx.token}`
+                Authorization: `Bearer ${authCtx.token}`,
             },
-        })
+        });
         if (!response.ok) {
-            Alert.alert(
-                'Something went wrong!',
-                'Please try again later!'
-            );
+            Alert.alert("Something went wrong!", "Please try again later!");
             setIsLoading(false);
         } else {
             const data = await response.json();
             setUser(data);
             setIsLoading(false);
         }
-    }, [authCtx])
+    }, [authCtx]);
 
     useEffect(() => {
         fetchUser();
-    }, [fetchUser])
+    }, [fetchUser]);
 
     if (isLoading) {
         return <LoadingOverlay/>;
@@ -57,27 +56,56 @@ function ProfileScreen() {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [3, 3],
-            quality: 1,
+            quality: 0,
         });
 
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
         }
+
+        let localUri = result.assets[0].uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+
+        const formData = new FormData();
+        formData.append("image", { uri: localUri, name: filename, type });
+        await fetch("http://localhost:8080/users/image", {
+            method: "POST",
+            body: formData,
+            headers: {
+                Authorization: `Bearer ${authCtx.token}`,
+            }
+        }).catch((error) => console.log(error));
     };
 
-    const interests = interestsCtx.interests.filter((interest) => interest.counterEvents >= 3).map(interest => interest.interestKey);
+    const interests = interestsCtx.interests
+        .filter((interest) => interest.counterEvents >= 3)
+        .map((interest) => interest.interestKey);
 
     return (
         <ScrollView>
             <View style={styles.detailsContainer}>
                 <View style={styles.imageContainer}>
-
-                        <Image style={styles.image}
-                               source={{uri: selectedImage !== null ? selectedImage : (user.imageUri ? user.imageUri : image)}}/>
-
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri:
+                                selectedImage !== null
+                                    ? selectedImage
+                                    : user.imageUri
+                                        ? user.imageUri
+                                        : image,
+                        }}
+                    />
                 </View>
                 <Text style={styles.name}>{user.username}</Text>
-                <ButtonOutlined icon="image-outline" onPress={pickImage}>Change Photo</ButtonOutlined>
+                <ButtonOutlined icon="image-outline" onPress={pickImage}>
+                    Change Photo
+                </ButtonOutlined>
             </View>
             <View style={styles.aboutContainer}>
                 <View style={styles.aboutHeaderContainer}>
@@ -85,13 +113,20 @@ function ProfileScreen() {
                 </View>
                 <Text>{about}</Text>
             </View>
-            {interests.length !== 0 && (<Interests list={interests}/>)}
+            {interests.length !== 0 && <Interests list={interests}/>}
             <View style={styles.buttons}>
-                <ButtonOutlined color={colors.error500} icon="log-out-outline" iconSize={22}
-                                iconOnTheRight={true} onPress={authCtx.logout}>LOGOUT</ButtonOutlined>
+                <ButtonOutlined
+                    color={colors.error500}
+                    icon="log-out-outline"
+                    iconSize={22}
+                    iconOnTheRight={true}
+                    onPress={authCtx.logout}
+                >
+                    LOGOUT
+                </ButtonOutlined>
             </View>
         </ScrollView>
-    )
+    );
 }
 
 export default ProfileScreen;
@@ -99,7 +134,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     detailsContainer: {
         alignItems: "center",
-        marginVertical: 16
+        marginVertical: 16,
     },
     imageContainer: {
         width: 150,
@@ -114,7 +149,7 @@ const styles = StyleSheet.create({
     name: {
         fontWeight: "bold",
         fontSize: 22,
-        margin: 16
+        margin: 16,
     },
     aboutContainer: {
         marginBottom: 16,
@@ -124,17 +159,17 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderBottomWidth: 2,
         borderColor: colors.primary600,
-        marginBottom: 16
+        marginBottom: 16,
     },
     aboutHeaderText: {
         textAlign: "center",
         color: colors.primary500,
         fontWeight: "bold",
         fontSize: 14,
-        paddingBottom: 2
+        paddingBottom: 2,
     },
     buttons: {
         justifyContent: "center",
         alignSelf: "center",
     },
-})
+});

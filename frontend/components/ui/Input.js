@@ -3,7 +3,7 @@ import colors from "../../constants/colors";
 import {Ionicons} from "@expo/vector-icons";
 import {useState} from "react";
 
-function Input({label, icon, keyboardType, secure, onUpdateValue, value, isInvalid}) {
+function Input({label, icon, keyboardType, secure, onUpdateValue, value, isInvalid, children}) {
     const [inputBorderColor, setInputBorderColor] = useState(colors.grey800);
 
     function customOnFocus() {
@@ -14,12 +14,14 @@ function Input({label, icon, keyboardType, secure, onUpdateValue, value, isInval
         setInputBorderColor(colors.grey800);
     }
 
+    let expoIcon = children ? children : <Ionicons name={icon} size={24} color={isInvalid ? colors.error500 : inputBorderColor}/>
+
     return (
         <View style={styles.inputContainer}>
             <Text style={[styles.label, {color:inputBorderColor}, isInvalid && styles.labelInvalid]}>{label}</Text>
             <View style={[styles.input, {borderColor: inputBorderColor}, isInvalid && styles.inputInvalid]}
                   onFocus={customOnFocus} onBlur={customOnBlur}>
-                <Ionicons name={icon} size={24} color={isInvalid ? colors.error500 : inputBorderColor}/>
+                { expoIcon }
                 <TextInput
                     style={{marginHorizontal: icon ? 8 : 0, flex: 1}}
                     autoCorrect={false}

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import {Ionicons} from "@expo/vector-icons";
 import colors from "../../constants/colors";
 
-function EventCard({id, image, date, title, location}) {
+function EventCard({id, imageUri, date, title, location}) {
     const navigation = useNavigation();
 
     function pressHandler() {
@@ -30,7 +30,7 @@ function EventCard({id, image, date, title, location}) {
                 : [styles.container]
         }>
             <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: image}}/>
+                <Image style={styles.image} source={{uri: imageUri}}/>
             </View>
             <View style={styles.detailsContainer}>
                 <Text style={styles.date}>{updatedDate}</Text>
